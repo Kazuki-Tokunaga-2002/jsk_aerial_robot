@@ -58,7 +58,7 @@ class CeilingCircleIKNode(object):
         parser.add_argument("--update-interval", type=float, default=0.02)
         parser.add_argument("--trail-points", type=int, default=80)
 
-        return parser.parse_args()
+        return parser.parse_args(rospy.myargv()[1:])
 
     def load_params(self):
         # load hydrus namespace
