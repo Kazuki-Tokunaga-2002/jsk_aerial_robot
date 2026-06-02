@@ -86,17 +86,17 @@ class CeilingCircleIKNode(object):
 
         # altitude stability
         self.z_threshold = rospy.get_param("~z_threshold", 0.10)
-        self.vz_threshold = rospy.get_param("~vz_threshold", 0.08)
-        self.stable_time = rospy.get_param("~stable_time", 1.5)
+        self.vz_threshold = rospy.get_param("~vz_threshold", 0.10)
+        self.stable_time = rospy.get_param("~stable_time", 1.0)
 
         # z velocity control
         self.kp_z = rospy.get_param("~kp_z", 0.10)
         self.max_vz = rospy.get_param("~max_vz", 0.05)
 
         # start pose stability
-        self.start_err_tol = rospy.get_param("~start_err_tol", 0.05)
-        self.radius_err_tol = rospy.get_param("~radius_err_tol", 0.05)
-        self.start_stable_time = rospy.get_param("~start_stable_time", 2.0)
+        self.start_err_tol = rospy.get_param("~start_err_tol", 0.07)
+        self.radius_err_tol = rospy.get_param("~radius_err_tol", 0.07)
+        self.start_stable_time = rospy.get_param("~start_stable_time", 1.0)
 
     def setup_ros(self):
         self.tf_listener = tf.TransformListener()
