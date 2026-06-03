@@ -15,9 +15,9 @@ class CeilingEffectPrepareNode(object):
         self.robot_ns = self.robot_ns.rstrip("/")
 
         # ===== 関節角度パラメータ =====
-        self.q1_const = rospy.get_param("~q1_const", 1.00)
+        self.q1_const = rospy.get_param("~q1_const", 1.40)
         self.q2_const = rospy.get_param("~q2_const", 0.60)
-        self.q3_start_param = rospy.get_param("~q3_start", 1.00)
+        self.q3_start_param = rospy.get_param("~q3_start", 1.40)
 
         self.joint_set_speed = rospy.get_param("~joint_set_speed", 0.03)
         self.min_joint_set_time = rospy.get_param("~min_joint_set_time", 15.0)

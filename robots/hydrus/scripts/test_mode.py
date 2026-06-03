@@ -53,6 +53,8 @@ class CeilingEffectRunNode(object):
         self.min_joint_set_time = rospy.get_param("~min_joint_set_time", 1.0)
 
         # ===== 現在値 =====
+        self.current_cog_x = None
+        self.current_cog_y = None
         self.current_z = None
         self.current_vz = None
         self.current_root_z = None 
@@ -60,6 +62,13 @@ class CeilingEffectRunNode(object):
         self.current_q1 = None
         self.current_q2 = None
         self.current_q3 = None
+
+        self.current_cog_yaw = None 
+
+        # ===== COG保持目標値 =====
+        self.hold_cog_x = None
+        self.hold_cog_y = None
+        self.hold_cog_yaw = None
 
         # ===== 初期姿勢移動用 =====
         self.q1_init = None
@@ -86,6 +95,12 @@ class CeilingEffectRunNode(object):
             self.robot_ns + "/uav/baselink/odom",
             Odometry,
             self.odom_callback
+        )
+
+        self.cog_odom_sub = rospy.Subscriber(
+            self.robot_ns + "/uav/cog/odom",
+            Odometry,
+            self.cog_odom_callback
         )
 
         # ===== Publisher =====
@@ -126,6 +141,15 @@ class CeilingEffectRunNode(object):
     def odom_callback(self, msg):
         self.current_z = msg.pose.pose.position.z
         self.current_vz = msg.twist.twist.linear.z
+    
+    def cog_odom_callback(self, msg):
+        self.current_cog_x = msg.pose.pose.position.x
+        self.current_cog_y = msg.pose.pose.position.y
+
+        q = msg.pose.pose.orientation
+        quat = [q.x, q.y, q.z, q.w]
+        roll, pitch, yaw = tf.transformations.euler_from_quaternion(quat)
+        self.current_cog_yaw = yaw
 
     def update_root_z_from_tf(self):
         try:
@@ -210,7 +234,12 @@ class CeilingEffectRunNode(object):
         return q1, q2, q3
 
     def publish_z_velocity_command(self):
-        if self.current_root_z is None:
+        if (
+            self.current_root_z is None or
+            self.hold_cog_x is None or
+            self.hold_cog_y is None or
+            self.hold_cog_yaw is None
+        ):
             return
 
         error_z = self.target_z - self.current_root_z
@@ -224,23 +253,42 @@ class CeilingEffectRunNode(object):
         nav_msg.pos_z_nav_mode = FlightNav.VEL_MODE
         nav_msg.target_vel_z = vz_cmd
 
+        nav_msg.pos_xy_nav_mode = FlightNav.POS_MODE
+        nav_msg.target_pos_x = self.hold_cog_x
+        nav_msg.target_pos_y = self.hold_cog_y
+
+
+        nav_msg.yaw_nav_mode = FlightNav.POS_MODE
+        nav_msg.target_yaw = self.hold_cog_yaw
+
         self.nav_pub.publish(nav_msg)
 
         rospy.loginfo_throttle(
             1.0,
-            "[GO_TARGET_ALTITUDE] root_z=%.3f, target_root_z=%.3f, vz_cmd=%.3f",
+            "[GO_TARGET_ALTITUDE] hold_x=%.3f, hold_y=%.3f, hold_yaw=%.3f, root_z=%.3f, target_z=%.3f, vz_cmd=%.3f",
+            self.hold_cog_x,
+            self.hold_cog_y,
+            self.hold_cog_yaw,
             self.current_root_z,
             self.target_z,
             vz_cmd
         )
         
-    def publish_z_position_command(self, target_z):
+    def publish_cog_xyz_yaw_position_command(self):
         nav_msg = FlightNav()
         nav_msg.header.stamp = rospy.Time.now()
         nav_msg.control_frame = FlightNav.WORLD_FRAME
         nav_msg.target = FlightNav.COG
+
+        nav_msg.pos_xy_nav_mode = FlightNav.POS_MODE
+        nav_msg.target_pos_x = self.hold_cog_x
+        nav_msg.target_pos_y = self.hold_cog_y
+
         nav_msg.pos_z_nav_mode = FlightNav.POS_MODE
-        nav_msg.target_pos_z = target_z
+        nav_msg.target_pos_z = self.target_z
+
+        nav_msg.yaw_nav_mode = FlightNav.POS_MODE
+        nav_msg.target_yaw = self.hold_cog_yaw
 
         self.nav_pub.publish(nav_msg)
 
@@ -335,6 +383,10 @@ class CeilingEffectRunNode(object):
             self.publish_joint_command(q1, q2, q3)
 
             if t > self.start_joint_set_time:
+                self.hold_cog_x = self.current_cog_x
+                self.hold_cog_y = self.current_cog_y
+                self.hold_cog_yaw = self.current_cog_yaw
+                
                 rospy.loginfo(
                     "Start joint pose reached. "
                     "q1=%.3f, q2=%.3f, q3=%.3f. Moving to target altitude.",
@@ -373,22 +425,31 @@ class CeilingEffectRunNode(object):
                 if stable_elapsed > self.stable_time:
                     self.motion_start_time = now
 
+                    self.hold_cog_x = self.current_cog_x
+                    self.hold_cog_y = self.current_cog_y
+                    self.hold_cog_yaw = self.current_cog_yaw
+
                     rospy.loginfo(
                         "Altitude stabilized. Starting q3-only motion. "
-                        "q1=%.3f, q2=%.3f fixed, q3=%.3f -> %.3f",
+                        "q1=%.3f, q2=%.3f fixed, q3=%.3f -> %.3f. "
+                        "Holding COG at x=%.3f, y=%.3f, yaw=%.3f, target_z=%.3f",
                         self.q1_const,
                         self.q2_const,
                         self.q3_start,
-                        self.q3_goal
+                        self.q3_goal,
+                        self.hold_cog_x,
+                        self.hold_cog_y,
+                        self.hold_cog_yaw,
+                        self.target_z
                     )
-
+                    
                     self.change_state("SLOW_JOINT_MOTION")
             else:
                 self.stable_start_time = None
 
         elif self.state == "SLOW_JOINT_MOTION":
             # 目標高度を保持しながら q3 のみ変化
-            self.publish_z_position_command(self.target_z)
+            self.publish_cog_xyz_yaw_position_command()
 
             t = (now - self.motion_start_time).to_sec()
             q1, q2, q3 = self.slow_joint_trajectory(t)
@@ -408,7 +469,7 @@ class CeilingEffectRunNode(object):
 
         elif self.state == "HOLD":
             # 最終姿勢と目標高度を維持
-            self.publish_z_position_command(self.target_z)
+            self.publish_cog_xyz_yaw_position_command()
 
             self.publish_joint_command(
                 self.q1_const,
