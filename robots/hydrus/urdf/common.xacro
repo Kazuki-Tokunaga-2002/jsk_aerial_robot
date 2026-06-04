@@ -165,9 +165,9 @@
   </xacro:macro>
 
   <!-- support_ce -->
-  <xacro:macro name="support_ce_module" params="name parent *origin">
+  <xacro:macro name="support_ce_module" params="name parent model_url:=package://hydrus/urdf/mesh/ver3/support_ce/support_ce.${mesh_ext} *origin">
     <xacro:extra_module name="${name}" parent="${parent}" visible="1"
-                        model_url="package://hydrus/urdf/mesh/ver3/support_ce/support_ce_8R5.${mesh_ext}">
+                        model_url="${model_url}">
       <xacro:insert_block name="origin"/>
       <inertial>
         <origin xyz="0 0 0" rpy="0 0 0"/>
