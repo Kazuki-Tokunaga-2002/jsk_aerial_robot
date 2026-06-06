@@ -304,7 +304,7 @@
       <!-- support_ce4: link4 -->
       <xacro:if value="${self == 4}">
         <xacro:support_ce_module name="support_ce4" parent="link4"
-                                 model_url="package://hydrus/urdf/mesh/ver3/support_painter/support_painter.${mesh_ext}">
+                                 model_url="package://hydrus/urdf/mesh/ver3/support_ce/support_ce_8R5.${mesh_ext}">
           <origin xyz="${end_leg_offset} 0.000 0.01" rpy="0 0 0"/>
         </xacro:support_ce_module>
       </xacro:if>
