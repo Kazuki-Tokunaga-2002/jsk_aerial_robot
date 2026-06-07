@@ -165,16 +165,16 @@
   </xacro:macro>
 
   <!-- support_ce -->
-  <xacro:macro name="support_ce_module" params="name parent model_url:=package://hydrus/urdf/mesh/ver3/support_ce/support_ce_8R5.${mesh_ext} *origin">
+  <xacro:macro name="support_ce_module" params="name parent model_url:=package://hydrus/urdf/mesh/ver3/support_ce/support_ce_8R5.${mesh_ext} inertial_origin_xyz:='0 0 0' inertial_origin_rpy:='0 0 0' mass:=0.001 ixx:=0.000001 ixy:=0.0 ixz:=0.0 iyy:=0.000001 iyz:=0.0 izz:=0.000001 *origin">
     <xacro:extra_module name="${name}" parent="${parent}" visible="1"
                         model_url="${model_url}">
       <xacro:insert_block name="origin"/>
       <inertial>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-        <mass value="0.001"/>
-        <inertia ixx="0.000001" ixy="0.0" ixz="0.0"
-                iyy="0.000001" iyz="0.0"
-                izz="0.000001"/>
+        <origin xyz="${inertial_origin_xyz}" rpy="${inertial_origin_rpy}"/>
+        <mass value="${mass}"/>
+        <inertia ixx="${ixx}" ixy="${ixy}" ixz="${ixz}"
+                iyy="${iyy}" iyz="${iyz}"
+                izz="${izz}"/>
       </inertial>
     </xacro:extra_module>
   </xacro:macro>

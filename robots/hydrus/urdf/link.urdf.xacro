@@ -3,7 +3,7 @@
     xmlns:xacro="http://www.ros.org/wiki/xacro" name="hydrus_link" >
 
   <!-- D-H kai description(different from prof.nakamura) -->
-  <xacro:macro name="hydrus_link" params="links self rotor_direction with_leg:=1 with_battery:=1 old_version:=0 tilt_mode:=0 tilt_angle:=0 prop_15inch:=0 mesh_ext:=dae support_ce:=0">
+  <xacro:macro name="hydrus_link" params="links self rotor_direction with_leg:=1 with_battery:=1 old_version:=0 tilt_mode:=0 tilt_angle:=0 prop_15inch:=0 mesh_ext:=dae support_ce:=0 support_ce_model_url:=package://hydrus/urdf/mesh/ver3/support_ce/support_ce_8R5.${mesh_ext} support_ce4_inertial_origin_xyz:='0 0 0' support_ce4_inertial_origin_rpy:='0 0 0' support_ce4_mass:=0.001 support_ce4_ixx:=0.000001 support_ce4_ixy:=0.0 support_ce4_ixz:=0.0 support_ce4_iyy:=0.000001 support_ce4_iyz:=0.0 support_ce4_izz:=0.000001">
 
     <xacro:if value="${old_version == 1}">
       <!-- link -->
@@ -304,7 +304,13 @@
       <!-- support_ce4: link4 -->
       <xacro:if value="${self == 4}">
         <xacro:support_ce_module name="support_ce4" parent="link4"
-                                 model_url="package://hydrus/urdf/mesh/ver3/support_ce/support_ce_8R5.${mesh_ext}">
+                                 model_url="${support_ce_model_url}"
+                                 inertial_origin_xyz="${support_ce4_inertial_origin_xyz}"
+                                 inertial_origin_rpy="${support_ce4_inertial_origin_rpy}"
+                                 mass="${support_ce4_mass}"
+                                 ixx="${support_ce4_ixx}" ixy="${support_ce4_ixy}" ixz="${support_ce4_ixz}"
+                                 iyy="${support_ce4_iyy}" iyz="${support_ce4_iyz}"
+                                 izz="${support_ce4_izz}">
           <origin xyz="${end_leg_offset} 0.000 0.01" rpy="0 0 0"/>
         </xacro:support_ce_module>
       </xacro:if>

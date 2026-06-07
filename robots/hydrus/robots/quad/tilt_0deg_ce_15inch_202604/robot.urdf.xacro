@@ -12,7 +12,14 @@
   <xacro:hydrus_link links="4" self="1" rotor_direction="-1" with_battery = "0" tilt_mode="0" with_leg="1" mesh_ext="$(arg mesh_ext)" support_ce="1"/>
   <xacro:hydrus_link links="4" self="2" rotor_direction="1"  with_battery = "0" tilt_mode="0" with_leg="1" mesh_ext="$(arg mesh_ext)" support_ce="1"/>
   <xacro:hydrus_link links="4" self="3" rotor_direction="-1" with_battery = "0" tilt_mode="0" with_leg="1" mesh_ext="$(arg mesh_ext)" support_ce="1"/>
-  <xacro:hydrus_link links="4" self="4" rotor_direction="1"  with_battery = "0" tilt_mode="0" with_leg="1" mesh_ext="$(arg mesh_ext)" support_ce="1"/>
+  <xacro:hydrus_link links="4" self="4" rotor_direction="1"  with_battery = "0" tilt_mode="0" with_leg="1" mesh_ext="$(arg mesh_ext)" support_ce="1"
+                     support_ce_model_url="package://hydrus/urdf/mesh/ver3/support_painter/support_painter_side.${mesh_ext}"
+                     support_ce4_inertial_origin_xyz="0.10434 0.00153 0.01788"
+                     support_ce4_inertial_origin_rpy="0 0 0"
+                     support_ce4_mass="0.1"
+                     support_ce4_ixx="0.00004181611" support_ce4_ixy="0.00001286954" support_ce4_ixz="0.00001494399"
+                     support_ce4_iyy="0.00057716187" support_ce4_iyz="0.00000031231"
+                     support_ce4_izz="0.00054349301"/>
 
   <!-- special battery arrangement -->
   <!-- <xacro:extra_module name = "bat1" parent = "link1" visible = "1"
