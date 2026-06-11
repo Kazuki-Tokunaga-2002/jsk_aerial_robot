@@ -227,16 +227,31 @@ void HydrusCeilingEffectLQIController::updateCeilingEffectGain()
       return;
     }
 
-    const double l12_bar = rotor_distance_ratio_.at(0); // l12/R - 2
-    const double l34_bar = rotor_distance_ratio_.at(5); // l34/R - 2
+    // rotor_distance_ratio_ order:
+    //   [0] = l12/R - 2
+    //   [1] = l13/R - 2
+    //   [2] = l14/R - 2
+    //   [3] = l23/R - 2
+    //   [4] = l24/R - 2
+    //   [5] = l34/R - 2
+    const double l12_bar = rotor_distance_ratio_.at(0);
+    const double l13_bar = rotor_distance_ratio_.at(1);
+    const double l14_bar = rotor_distance_ratio_.at(2);
+    const double l23_bar = rotor_distance_ratio_.at(3);
+    const double l24_bar = rotor_distance_ratio_.at(4);
+    const double l34_bar = rotor_distance_ratio_.at(5);
 
-    const double k12 = lookupCTRatio(l12_bar, d_R);
-    const double k34 = lookupCTRatio(l34_bar, d_R);
+    // For each rotor, use the minimum distance ratio to the other three rotors.
+    // This assumes that the closest rotor interaction is dominant.
+    const double l1_min_bar = std::min({l12_bar, l13_bar, l14_bar});
+    const double l2_min_bar = std::min({l12_bar, l23_bar, l24_bar});
+    const double l3_min_bar = std::min({l13_bar, l23_bar, l34_bar});
+    const double l4_min_bar = std::min({l14_bar, l24_bar, l34_bar});
 
-    ceiling_effect_gain_.at(0) = k12;
-    ceiling_effect_gain_.at(1) = k12;
-    ceiling_effect_gain_.at(2) = k34;
-    ceiling_effect_gain_.at(3) = k34;
+    ceiling_effect_gain_.at(0) = lookupCTRatio(l1_min_bar, d_R);
+    ceiling_effect_gain_.at(1) = lookupCTRatio(l2_min_bar, d_R);
+    ceiling_effect_gain_.at(2) = lookupCTRatio(l3_min_bar, d_R);
+    ceiling_effect_gain_.at(3) = lookupCTRatio(l4_min_bar, d_R);
 
     return;
   }
