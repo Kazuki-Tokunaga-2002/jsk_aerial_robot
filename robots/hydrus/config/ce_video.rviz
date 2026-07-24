@@ -7,6 +7,14 @@ Panels:
         - /Global Options1
         - /Status1
         - /TF1
+        - /PointCloud21
+        - /PWM11
+        - /Marker1
+        - /Marker1/Namespaces1
+        - /PWM21
+        - /PWM31
+        - /PWM41
+        - /d/R1
       Splitter Ratio: 0.5
     Tree Height: 719
   - Class: rviz/Selection
@@ -26,7 +34,7 @@ Panels:
   - Class: rviz/Time
     Name: Time
     SyncMode: 0
-    SyncSource: PointCloud2
+    SyncSource: ""
 Preferences:
   PromptSaveOnExit: true
 Toolbars:
@@ -59,10 +67,6 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: true
-        body:
-          Value: true
-        camera_init:
-          Value: true
         hydrus/cog:
           Value: true
         hydrus/fc:
@@ -76,8 +80,6 @@ Visualization Manager:
         hydrus/leg4:
           Value: true
         hydrus/leg5:
-          Value: true
-        hydrus/lidar_imu:
           Value: true
         hydrus/link1:
           Value: true
@@ -99,6 +101,8 @@ Visualization Manager:
           Value: true
         hydrus/support_ce4:
           Value: true
+        hydrus/support_ce_spinal:
+          Value: true
         hydrus/support_livox:
           Value: true
         hydrus/thrust1:
@@ -119,9 +123,6 @@ Visualization Manager:
       Show Names: true
       Tree:
         world:
-          camera_init:
-            body:
-              {}
           hydrus/root:
             hydrus/cog:
               {}
@@ -150,7 +151,7 @@ Visualization Manager:
                   hydrus/support_ce3:
                     {}
                   hydrus/support_livox:
-                    hydrus/lidar_imu:
+                    hydrus/support_ce_spinal:
                       {}
                   hydrus/thrust3:
                     {}
@@ -204,11 +205,6 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        lidar_imu:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         link1:
           Alpha: 1
           Show Axes: false
@@ -254,6 +250,11 @@ Visualization Manager:
           Show Trail: false
           Value: true
         support_ce4:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        support_ce_spinal:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -341,9 +342,132 @@ Visualization Manager:
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
+    - Class: jsk_rviz_plugin/PieChart
+      Enabled: true
+      Name: PWM1
+      Topic: /ce_viz/pwm1
+      Value: true
+      auto color change: false
+      background color: 0; 0; 0
+      backround alpha: 0
+      clockwise rotate direction: false
+      foreground alpha: 0.699999988079071
+      foreground alpha 2: 0.4000000059604645
+      foreground color: 25; 255; 240
+      left: 128
+      max color: 255; 0; 0
+      max color change threthold: 0
+      max value: 1800
+      med color: 255; 0; 0
+      med color change threthold: 0
+      min value: 1000
+      show caption: true
+      size: 128
+      text size: 14
+      top: 128
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /ce_viz/ceiling_marker
+      Name: Marker
+      Namespaces:
+        ceiling: true
+      Queue Size: 100
+      Value: true
+    - Class: jsk_rviz_plugin/PieChart
+      Enabled: true
+      Name: PWM2
+      Topic: /ce_viz/pwm2
+      Value: true
+      auto color change: false
+      background color: 0; 0; 0
+      backround alpha: 0
+      clockwise rotate direction: false
+      foreground alpha: 0.699999988079071
+      foreground alpha 2: 0.4000000059604645
+      foreground color: 25; 255; 240
+      left: 256
+      max color: 255; 0; 0
+      max color change threthold: 0
+      max value: 1800
+      med color: 255; 0; 0
+      med color change threthold: 0
+      min value: 1000
+      show caption: true
+      size: 128
+      text size: 14
+      top: 128
+    - Class: jsk_rviz_plugin/PieChart
+      Enabled: true
+      Name: PWM3
+      Topic: /ce_viz/pwm3
+      Value: true
+      auto color change: false
+      background color: 0; 0; 0
+      backround alpha: 0
+      clockwise rotate direction: false
+      foreground alpha: 0.699999988079071
+      foreground alpha 2: 0.4000000059604645
+      foreground color: 25; 255; 240
+      left: 384
+      max color: 255; 0; 0
+      max color change threthold: 0
+      max value: 1800
+      med color: 255; 0; 0
+      med color change threthold: 0
+      min value: 1000
+      show caption: true
+      size: 128
+      text size: 14
+      top: 128
+    - Class: jsk_rviz_plugin/PieChart
+      Enabled: true
+      Name: PWM4
+      Topic: /ce_viz/pwm4
+      Value: true
+      auto color change: false
+      background color: 0; 0; 0
+      backround alpha: 0
+      clockwise rotate direction: false
+      foreground alpha: 0.699999988079071
+      foreground alpha 2: 0.4000000059604645
+      foreground color: 25; 255; 240
+      left: 512
+      max color: 255; 0; 0
+      max color change threthold: 0
+      max value: 1800
+      med color: 255; 0; 0
+      med color change threthold: 0
+      min value: 1000
+      show caption: true
+      size: 128
+      text size: 14
+      top: 128
+    - Class: jsk_rviz_plugin/PieChart
+      Enabled: true
+      Name: d/R
+      Topic: /ce_viz/d_R
+      Value: true
+      auto color change: false
+      background color: 0; 0; 0
+      backround alpha: 0
+      clockwise rotate direction: false
+      foreground alpha: 0.699999988079071
+      foreground alpha 2: 0.4000000059604645
+      foreground color: 25; 255; 240
+      left: 128
+      max color: 255; 0; 0
+      max color change threthold: 0
+      max value: 2
+      med color: 255; 0; 0
+      med color change threthold: 0
+      min value: 0
+      show caption: true
+      size: 128
+      text size: 14
+      top: 276
   Enabled: true
   Global Options:
-    Background Color: 48; 48; 48
+    Background Color: 255; 255; 255
     Default Light: true
     Fixed Frame: world
     Frame Rate: 30
@@ -369,7 +493,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 8.003931999206543
+      Distance: 10.644429206848145
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -385,9 +509,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.4147968292236328
+      Pitch: 0.22979548573493958
       Target Frame: <Fixed Frame>
-      Yaw: 3.5904030799865723
+      Yaw: 3.8004069328308105
     Saved: ~
 Window Geometry:
   Displays:
@@ -405,5 +529,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1267
-  X: 653
-  Y: 32
+  X: 617
+  Y: 90

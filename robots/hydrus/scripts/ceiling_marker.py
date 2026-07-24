@@ -4,6 +4,7 @@ import rospy
 from std_msgs.msg import Float32, Float64, Float64MultiArray, Float32MultiArray, ColorRGBA
 from nav_msgs.msg import Odometry
 from visualization_msgs.msg import Marker
+
 from jsk_rviz_plugins.msg import OverlayText
 
 from spinal.msg import Pwms
@@ -18,10 +19,7 @@ class CeilingEffectVideoOverlay:
 
         self.pwms = [None, None, None, None]
 
-        # 今回は COG 基準
-        # z_actual = z_cog
-        # z_target = target_pos_z sent to FlightNav.COG
-        # z_error  = z_target - z_actual
+        # COG 基準
         self.z_actual = None
         self.z_target = None
 
@@ -33,9 +31,15 @@ class CeilingEffectVideoOverlay:
             rospy.get_param("~ceiling_height", 2.73)
         )
 
-        self.ceiling_size_x = rospy.get_param("~ceiling_size_x", 8.0)
-        self.ceiling_size_y = rospy.get_param("~ceiling_size_y", 8.0)
-        self.ceiling_thickness = rospy.get_param("~ceiling_thickness", 0.05)
+        self.ceiling_size_x = rospy.get_param("~ceiling_size_x", 4.0)
+        self.ceiling_size_y = rospy.get_param("~ceiling_size_y", 4.0)
+        self.ceiling_thickness = rospy.get_param("~ceiling_thickness", 0.01)
+
+        # ===== rotor-disc parameters =====
+        self.rotor_radius = rospy.get_param("~rotor_radius", 0.1778)
+        self.rotor_disc_thickness = rospy.get_param(
+            "~rotor_disc_thickness", 0.005
+        )
 
         # ===== subscribers =====
         rospy.Subscriber(
@@ -62,11 +66,6 @@ class CeilingEffectVideoOverlay:
             self.pwm_cb
         )
 
-        # 変更点:
-        # 以前は /hydrus/uav/baselink/odom を読んでいたが、
-        # child_frame_id が hydrus/fc なので z_cog ではない。
-        # 今回の e_cog = z_target_cog - z_cog を見るため、
-        # /hydrus/uav/cog/odom を読む。
         rospy.Subscriber(
             "/hydrus/uav/cog/odom",
             Odometry,
@@ -86,10 +85,9 @@ class CeilingEffectVideoOverlay:
             queue_size=1
         )
 
-        # ===== PieChart / Plotter用 Float32 topics =====
+        # ===== Float32 topics =====
         self.pub_d_R = rospy.Publisher("/ce_viz/d_R", Float32, queue_size=1)
 
-        # l/R individual topics
         self.pub_l12_R = rospy.Publisher("/ce_viz/l12_R", Float32, queue_size=1)
         self.pub_l13_R = rospy.Publisher("/ce_viz/l13_R", Float32, queue_size=1)
         self.pub_l14_R = rospy.Publisher("/ce_viz/l14_R", Float32, queue_size=1)
@@ -97,24 +95,27 @@ class CeilingEffectVideoOverlay:
         self.pub_l24_R = rospy.Publisher("/ce_viz/l24_R", Float32, queue_size=1)
         self.pub_l34_R = rospy.Publisher("/ce_viz/l34_R", Float32, queue_size=1)
 
-        # gain individual topics
         self.pub_gain1 = rospy.Publisher("/ce_viz/gain1", Float32, queue_size=1)
         self.pub_gain2 = rospy.Publisher("/ce_viz/gain2", Float32, queue_size=1)
         self.pub_gain3 = rospy.Publisher("/ce_viz/gain3", Float32, queue_size=1)
         self.pub_gain4 = rospy.Publisher("/ce_viz/gain4", Float32, queue_size=1)
 
-        # PWM individual topics
         self.pub_pwm1 = rospy.Publisher("/ce_viz/pwm1", Float32, queue_size=1)
         self.pub_pwm2 = rospy.Publisher("/ce_viz/pwm2", Float32, queue_size=1)
         self.pub_pwm3 = rospy.Publisher("/ce_viz/pwm3", Float32, queue_size=1)
         self.pub_pwm4 = rospy.Publisher("/ce_viz/pwm4", Float32, queue_size=1)
 
-        # z topics
-        self.pub_z_actual = rospy.Publisher("/ce_viz/z_actual", Float32, queue_size=1)
-        self.pub_z_target = rospy.Publisher("/ce_viz/z_target", Float32, queue_size=1)
-        self.pub_z_error = rospy.Publisher("/ce_viz/z_error", Float32, queue_size=1)
+        self.pub_z_actual = rospy.Publisher(
+            "/ce_viz/z_actual", Float32, queue_size=1
+        )
+        self.pub_z_target = rospy.Publisher(
+            "/ce_viz/z_target", Float32, queue_size=1
+        )
+        self.pub_z_error = rospy.Publisher(
+            "/ce_viz/z_error", Float32, queue_size=1
+        )
 
-        # ===== ceiling marker publisher =====
+        # ===== markers =====
         self.pub_ceiling_marker = rospy.Publisher(
             "/ce_viz/ceiling_marker",
             Marker,
@@ -122,13 +123,18 @@ class CeilingEffectVideoOverlay:
             latch=True
         )
 
+        self.pub_rotor_disc_marker = rospy.Publisher(
+            "/ce_viz/rotor_disc_marker",
+            Marker,
+            queue_size=10
+        )
+
         self.timer = rospy.Timer(rospy.Duration(0.05), self.publish)
 
         rospy.loginfo("ce_video_overlay started")
         rospy.loginfo("ceiling marker frame_id = %s", self.frame_id)
         rospy.loginfo("ceiling_height = %.3f", self.ceiling_height)
-        rospy.loginfo("z_actual source = /hydrus/uav/cog/odom")
-        rospy.loginfo("z_error definition = z_target - z_cog")
+        rospy.loginfo("rotor_radius = %.4f", self.rotor_radius)
 
     def d_cb(self, msg):
         self.d_R = msg.data
@@ -146,13 +152,9 @@ class CeilingEffectVideoOverlay:
             self.pwms[i] = msg.motor_value[i]
 
     def odom_cb(self, msg):
-        # /hydrus/uav/cog/odom の z
-        # つまり z_cog
         self.z_actual = msg.pose.pose.position.z
 
     def nav_cb(self, msg):
-        # POS_MODE のときだけ target_pos_z を使う。
-        # VEL_MODE のときは target_pos_z は意味を持たない可能性があるため無視。
         if msg.pos_z_nav_mode == FlightNav.POS_MODE:
             self.z_target = msg.target_pos_z
 
@@ -183,21 +185,62 @@ class CeilingEffectVideoOverlay:
         marker.scale.y = self.ceiling_size_y
         marker.scale.z = self.ceiling_thickness
 
-        marker.color.r = 0.5
-        marker.color.g = 0.5
-        marker.color.b = 0.5
+        marker.color.r = 0.00
+        marker.color.g = 0.85
+        marker.color.b = 1.00
         marker.color.a = 0.35
 
         marker.lifetime = rospy.Duration(0.0)
 
         self.pub_ceiling_marker.publish(marker)
 
+    def publish_rotor_disc_markers(self):
+        rotor_frames = [
+            "hydrus/thrust1",
+            "hydrus/thrust2",
+            "hydrus/thrust3",
+            "hydrus/thrust4",
+        ]
+
+        for i, frame_id in enumerate(rotor_frames):
+            marker = Marker()
+            marker.header.frame_id = frame_id
+            marker.header.stamp = rospy.Time.now()
+
+            marker.ns = "rotor_discs"
+            marker.id = i
+            marker.type = Marker.CYLINDER
+            marker.action = Marker.ADD
+
+            # URDF の propeller visual と同じ位置
+            marker.pose.position.x = 0.0
+            marker.pose.position.y = 0.0
+            marker.pose.position.z = 0.032
+
+            marker.pose.orientation.x = 0.0
+            marker.pose.orientation.y = 0.0
+            marker.pose.orientation.z = 0.0
+            marker.pose.orientation.w = 1.0
+
+            marker.scale.x = 2.0 * self.rotor_radius
+            marker.scale.y = 2.0 * self.rotor_radius
+            marker.scale.z = self.rotor_disc_thickness
+
+            # 全ロータ共通の水色
+            marker.color.r = 0.00
+            marker.color.g = 0.60
+            marker.color.b = 1.00
+            marker.color.a = 0.35
+
+            marker.lifetime = rospy.Duration(0.0)
+
+            self.pub_rotor_disc_marker.publish(marker)
+
     def publish(self, event):
         # ===== d/R =====
         self.publish_float(self.pub_d_R, self.d_R)
 
-        # ===== l/R 6個を個別publish =====
-        # 注意: msg.data の順番が [l12, l13, l14, l23, l24, l34] である前提
+        # ===== l/R =====
         if self.l_R_list is not None and len(self.l_R_list) >= 6:
             self.publish_float(self.pub_l12_R, self.l_R_list[0])
             self.publish_float(self.pub_l13_R, self.l_R_list[1])
@@ -206,14 +249,14 @@ class CeilingEffectVideoOverlay:
             self.publish_float(self.pub_l24_R, self.l_R_list[4])
             self.publish_float(self.pub_l34_R, self.l_R_list[5])
 
-        # ===== gain 4個を個別publish =====
+        # ===== gains =====
         if self.gain_list is not None and len(self.gain_list) >= 4:
             self.publish_float(self.pub_gain1, self.gain_list[0])
             self.publish_float(self.pub_gain2, self.gain_list[1])
             self.publish_float(self.pub_gain3, self.gain_list[2])
             self.publish_float(self.pub_gain4, self.gain_list[3])
 
-        # ===== PWM 4個を個別publish =====
+        # ===== PWM =====
         self.publish_float(self.pub_pwm1, self.pwms[0])
         self.publish_float(self.pub_pwm2, self.pwms[1])
         self.publish_float(self.pub_pwm3, self.pwms[2])
@@ -225,7 +268,6 @@ class CeilingEffectVideoOverlay:
 
         z_error = None
         if self.z_actual is not None and self.z_target is not None:
-            # e_cog = z_target_cog - z_cog
             z_error = self.z_target - self.z_actual
             self.publish_float(self.pub_z_error, z_error)
 
@@ -252,7 +294,12 @@ class CeilingEffectVideoOverlay:
             l24_str = f"{self.l_R_list[4]:.3f}"
             l34_str = f"{self.l_R_list[5]:.3f}"
         else:
-            l12_str = l13_str = l14_str = l23_str = l24_str = l34_str = "--"
+            l12_str = "--"
+            l13_str = "--"
+            l14_str = "--"
+            l23_str = "--"
+            l24_str = "--"
+            l34_str = "--"
 
         if self.gain_list is not None and len(self.gain_list) >= 4:
             gain1_str = f"{self.gain_list[0]:.3f}"
@@ -260,7 +307,10 @@ class CeilingEffectVideoOverlay:
             gain3_str = f"{self.gain_list[2]:.3f}"
             gain4_str = f"{self.gain_list[3]:.3f}"
         else:
-            gain1_str = gain2_str = gain3_str = gain4_str = "--"
+            gain1_str = "--"
+            gain2_str = "--"
+            gain3_str = "--"
+            gain4_str = "--"
 
         z_actual_str = f"{self.z_actual:.3f}" if self.z_actual is not None else "--"
         z_target_str = f"{self.z_target:.3f}" if self.z_target is not None else "--"
@@ -290,15 +340,16 @@ class CeilingEffectVideoOverlay:
             f"z actual   : {z_actual_str} m\n"
             f"z target   : {z_target_str} m\n"
             f"z error    : {z_error_str} m\n"
-            f"error def. : target - cog\n"
+            "error def. : target - cog\n"
             "\n"
-            f"PWM        : {pwm_strs[0]}, {pwm_strs[1]}, {pwm_strs[2]}, {pwm_strs[3]}"
+            f"PWM        : {pwm_strs[0]}, {pwm_strs[1]}, "
+            f"{pwm_strs[2]}, {pwm_strs[3]}"
         )
 
         self.pub_text.publish(text)
 
-        # ceiling plane in RViz
         self.publish_ceiling_marker()
+        self.publish_rotor_disc_markers()
 
 
 if __name__ == "__main__":

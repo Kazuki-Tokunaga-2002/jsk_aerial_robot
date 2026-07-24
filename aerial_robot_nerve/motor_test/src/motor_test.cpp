@@ -102,7 +102,10 @@ private:
     pwm_value_ = min_pwm_value_;
 
     spinal::PwmTest cmd_msg;
-    cmd_msg.pwms.push_back(pwm_value_  / pwm_range_);
+    // cmd_msg.pwms.push_back(pwm_value_  / pwm_range_);
+    for(int i=0;i<2;i++){
+      cmd_msg.pwms.push_back(pwm_value_  / pwm_range_);// for 2 motors
+    }
     motor_pwm_pub_.publish(cmd_msg);
     init_time_ = ros::Time::now();
     ROS_INFO("start pwm test");
@@ -172,7 +175,10 @@ private:
                 if(once_flag_)
                   {
                     spinal::PwmTest cmd_msg;
-                    cmd_msg.pwms.push_back(stop_pwm_value_  / pwm_range_);
+                    // cmd_msg.pwms.push_back(stop_pwm_value_  / pwm_range_);
+                    for(int i=0;i<2;i++){
+                      cmd_msg.pwms.push_back(stop_pwm_value_  / pwm_range_);// for 2 motors
+                    }
                     motor_pwm_pub_.publish(cmd_msg);
                     once_flag_ = false;
                     ROS_WARN("STOP");
@@ -208,7 +214,10 @@ private:
           {
             start_flag_ = false;
             spinal::PwmTest cmd_msg;
-            cmd_msg.pwms.push_back(stop_pwm_value_  / pwm_range_);
+            // cmd_msg.pwms.push_back(stop_pwm_value_  / pwm_range_);
+            for(int i=0;i<2;i++){
+              cmd_msg.pwms.push_back(stop_pwm_value_  / pwm_range_);// for 2 motors
+            }
             motor_pwm_pub_.publish(cmd_msg);
 
             ROS_WARN("finish pwm test");
@@ -222,7 +231,10 @@ private:
           {
             ROS_INFO("target_pwm: %d", pwm_value_);
             spinal::PwmTest cmd_msg;
-            cmd_msg.pwms.push_back(pwm_value_  / pwm_range_);
+            // cmd_msg.pwms.push_back(pwm_value_  / pwm_range_);
+            for(int i=0;i<2;i++){
+              cmd_msg.pwms.push_back(pwm_value_  / pwm_range_);// for 2 motors
+            }
             motor_pwm_pub_.publish(cmd_msg);
           }
       }

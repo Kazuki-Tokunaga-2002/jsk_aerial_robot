@@ -190,7 +190,6 @@ def publish_debug(listener, debug_pubs, fixed_root_xyz, target_xyz):
         parent_frame='world',
         child_frame='hydrus/leg5'
     )
-
     root_xyz, _ = get_xyz_rpy(
         listener,
         parent_frame='world',
@@ -207,8 +206,8 @@ def publish_debug(listener, debug_pubs, fixed_root_xyz, target_xyz):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--steps', type=int, default=1000)
-    parser.add_argument('--radius', type=float, default=0.10)
+    parser.add_argument('--steps', type=int, default=10000)
+    parser.add_argument('--radius', type=float, default=0.15)
     parser.add_argument('--dt', type=float, default=0.02)
     parser.add_argument('--resolution', type=int, nargs=2, default=(960, 720))
     parser.add_argument('--update-interval', type=float, default=0.002)
@@ -235,7 +234,6 @@ def main():
     # ----------------------------------------------------------------
     rospy.init_node('trajectory_real', anonymous=True)
     listener = tf.TransformListener()
-
     nav_pub = rospy.Publisher('/hydrus/uav/nav', FlightNav, queue_size=1)
     joint_pub = rospy.Publisher('/hydrus/joints_ctrl', JointState, queue_size=1)
     joint_reader = JointStateReader()
@@ -254,10 +252,10 @@ def main():
     # URDF 読み込み
     # ------------------------------------------------------------------
     # bringup が出す /hydrus/robot_description を優先 (無ければ URDF_PATH)
-    if rospy.has_param('/hydrus/robot_description'):
-        print('Loading URDF from param: /hydrus/robot_description')
+    if rospy.has_param('/hydrus/robot_description_rviz'):
+        print('Loading URDF from param: /hydrus/robot_description_rviz')
         robot = RobotModelFromURDF.from_robot_description(
-            '/hydrus/robot_description')
+            '/hydrus/robot_description_rviz')
     else:
         print('Loading URDF:', URDF_PATH)
         robot = RobotModelFromURDF(urdf_file=URDF_PATH)
@@ -394,8 +392,8 @@ def main():
     k = 0
     errors = []
     log_every = max(1, args.steps // 12)
-    q_cmd = np.array([robot.joint1.joint_angle(), robot.joint2.joint_angle(), robot.joint3.joint_angle()])
-    cog_cmd = robot.centroid().copy()
+    q_cmd = joint_reader.get_actual_q()
+    cog_cmd,_ = get_xyz_rpy(listener, parent_frame='world', child_frame='hydrus/cog')
 
 
     def step_once(k, center_xyz):

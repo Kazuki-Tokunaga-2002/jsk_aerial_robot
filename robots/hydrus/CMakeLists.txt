@@ -65,7 +65,16 @@ add_library(hydrus_numerical_jacobians test/hydrus/numerical_jacobians.cpp)
 target_link_libraries(hydrus_numerical_jacobians hydrus_robot_model ${catkin_LIBRARIES})
 add_executable(hydrus_jacobian_test test/hydrus/jacobian_test.cpp)
 target_link_libraries(hydrus_jacobian_test hydrus_numerical_jacobians ${catkin_LIBRARIES} ${GTEST_LIBRARIES})
-
+add_executable(hydrus_ee_circle src/trajectry/hydrus_ee_circle.cpp)
+target_link_libraries(hydrus_ee_circle
+  hydrus_robot_model
+  ${catkin_LIBRARIES}
+  ${EIGEN3_LIBRARIES}
+)
+add_dependencies(hydrus_ee_circle
+  ${catkin_EXPORTED_TARGETS}
+  aerial_robot_msgs_generate_messages_cpp
+)
 
 install(DIRECTORY include/${PROJECT_NAME}/ test/${PROJECT_NAME}/
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
