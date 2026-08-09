@@ -14,8 +14,12 @@
   <arg name="spawn_y" default="0.0"/>
   <arg name="spawn_z" default="0.4"/>
   <arg name="spawn_yaw" default="0.0"/>
-  <arg name="type" default="tri"/>
-  <arg name="version" default="20240722"/>
+  <!--Model selection:
+  Initial Delta(tri) : type:=tri version:=20240722
+  Initial Delta(quad) : type:=quad version:=20240722
+  Module Delta  : type:=quad version:=module_20260809-->
+  <arg name="type" default="quad"/>
+  <arg name="version" default="module_20260809"/> 
   <arg name="prop" default="9"/>
   <arg name="config_dir" default="$(find delta)/config"/>
   <arg name="robot_id" default="" />
@@ -68,6 +72,14 @@
   ###########  Robot Model  ###########
   <arg name="description_mode" value="urdf" unless="$(arg simulation)" />
   <arg name="description_mode" value="gazebo" if="$(arg simulation)" />
+  <group ns="$(arg robot_ns)">
+    <param name="robot_description_rviz"
+           command="$(find xacro)/xacro '$(find delta)/robots/$(arg type)/$(arg version)/delta.urdf.xacro' robot_name:=$(arg robot_ns)"
+           unless="$(arg direct_model)" />
+    <param name="robot_description_rviz"
+           command="$(find xacro)/xacro '$(arg direct_model_name)' robot_name:=$(arg robot_ns)"
+           if="$(arg direct_model)" />
+  </group>
   <include file="$(find aerial_robot_model)/launch/aerial_robot_model.launch" >
     <arg name="headless" value="$(arg headless)" />
     <arg name="robot_model" value="$(find delta)/robots/$(arg type)/$(arg version)/delta.$(arg description_mode).xacro" unless="$(arg direct_model)"/>

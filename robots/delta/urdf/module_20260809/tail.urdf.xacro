@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<robot
+    xmlns:xacro="http://www.ros.org/wiki/xacro" name="delta_link3" >
+
+  <xacro:macro name="tail" params="self">
+
+    <!-- link -->
+    <link name="link${self}">
+      <inertial>
+        <origin xyz="0.377991567990752 -0.000161024876653494 -0.00391787714256654" rpy="0 0 0"/>
+        <mass value="0.263721669788086"/>
+        <inertia
+             ixx="0.000355431582668654" ixy="-9.33614548639192E-11" ixz="-2.9817613025422E-10"
+             iyy="0.00158644913949618" iyz="6.5031578360472E-12"
+             izz="0.00126314991181988" />
+      </inertial>
+      <visual>
+        <geometry>
+          <mesh filename="package://delta/urdf/mesh/module_20260809/link${self}.${module_visual_mesh_ext}" />
+        </geometry>
+      </visual>
+      <xacro:if value="${module_use_link_collision}">
+      <collision>
+        <geometry>
+          <mesh filename="package://delta/urdf/mesh/module_20260809/link${self}.stl" />
+        </geometry>
+      </collision>
+      </xacro:if>
+    </link>
+    <xacro:large_friction link="link${self}"/>
+
+    <!-- link end frame -->
+    <link name="link${self}_end">
+      <xacro:virtual_inertial/>
+    </link>
+    <joint name="link${self}_end_joint" type="fixed">
+      <parent link="link${self}"/>
+      <child link="link${self}_end"/>
+      <origin xyz="0.5335 0  0" rpy="0 0 0"/>
+    </joint>
+
+    <!-- leg -->
+    <!-- link4 has one leg in the module_20260809 CAD mesh. -->
+    <!--
+    <link name="link${self}_leg1">
+      <inertial>
+        <mass value="${leg_mass}"/>
+        <inertia
+            ixx="${(leg_radius * leg_radius / 4.0 + leg_length * leg_length / 12.0) * leg_mass}" ixy="0.0" ixz="0.0"
+            iyy="${(leg_radius * leg_radius / 4.0 + leg_length * leg_length / 12.0) * leg_mass}" iyz="0.0"
+            izz="${(leg_radius * leg_radius / 2.0) * leg_mass}"/>
+      </inertial>
+      <collision>
+        <geometry>
+          <cylinder radius="${leg_radius}" length="${leg_length}"/>
+        </geometry>
+      </collision>
+    </link>
+    <joint name="link${self}_leg1_joint" type="fixed">
+      <parent link="link${self}"/>
+      <child link="link${self}_leg1"/>
+      <origin rpy="0 0 0" xyz="0.056 0 ${-0.012-leg_length/2.0}"/>
+      <axis xyz="0 0 1"/>
+    </joint>
+    -->
+
+    <link name="link${self}_leg2">
+      <inertial>
+        <mass value="${leg_mass}"/>
+        <inertia
+            ixx="${(leg_radius * leg_radius / 4.0 + leg_length * leg_length / 12.0) * leg_mass}" ixy="0.0" ixz="0.0"
+            iyy="${(leg_radius * leg_radius / 4.0 + leg_length * leg_length / 12.0) * leg_mass}" iyz="0.0"
+            izz="${(leg_radius * leg_radius / 2.0) * leg_mass}"/>
+      </inertial>
+      <collision>
+        <geometry>
+          <cylinder radius="${leg_radius}" length="${leg_length}"/>
+        </geometry>
+      </collision>
+      <!-- wide foot contact for stable Gazebo landing -->
+      <collision>
+        <origin rpy="0 0 0" xyz="0 0 ${-leg_length/2.0 + foot_pad_thickness/2.0}"/>
+        <geometry>
+          <cylinder radius="${foot_pad_radius}" length="${foot_pad_thickness}"/>
+        </geometry>
+      </collision>
+    </link>
+    <joint name="link${self}_leg2_joint" type="fixed">
+      <parent link="link${self}"/>
+      <child link="link${self}_leg2"/>
+      <origin rpy="0 0 0" xyz="0.5094 0 ${-0.012-leg_length/2.0}"/>
+      <axis xyz="0 0 1"/>
+    </joint>
+
+    <!-- gimbal -->
+    <link name="gimbal_link${self}">
+      <inertial>
+        <origin xyz="0.00150889121991327 0.000186493725328495 0.0257763980635103" rpy="0 0 0"/>
+        <mass value="0.439897937628711"/>
+        <inertia
+            ixx="0.00110488280641778" ixy="-6.80268193057088E-09" ixz="0.000109944130054001"
+            iyy="0.000496799408080961" iyz="5.72992559477629E-09"
+            izz="0.00147145224961744" />
+      </inertial>
+      <visual>
+        <geometry>
+          <mesh filename="package://delta/urdf/mesh/module_20260809/gimbal_link${self}.${module_visual_mesh_ext}" />
+        </geometry>
+      </visual>
+    </link>
+
+  </xacro:macro>
+</robot>
