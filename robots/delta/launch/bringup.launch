@@ -21,6 +21,7 @@
   <arg name="type" default="quad"/>
   <arg name="version" default="module_20260809"/> 
   <arg name="prop" default="9"/>
+  <arg name="ceiling_tilt" default="0"/>
   <arg name="config_dir" default="$(find delta)/config"/>
   <arg name="robot_id" default="" />
   <arg name="robot_ns" value="delta$(arg robot_id)" />
@@ -52,6 +53,7 @@
 
    ###########  Control  ###########
    <rosparam file="$(arg config_dir)/$(arg type)/$(arg version)/DeltaControl.yaml" command="load"/>
+   <param name="controller/ceiling_tilt" value="$(arg ceiling_tilt)" />
 
    ###########  Sensor Fusion  ###########
    <rosparam file="$(arg config_dir)/StateEstimation.yaml" command="load" />

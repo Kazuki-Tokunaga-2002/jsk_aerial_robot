@@ -124,6 +124,11 @@ private:
   ros::Publisher nlopt_result_pub_;                  // for debug
   ros::Publisher rotor_origin_pub_;                  // for debug
   ros::Publisher rotor_normal_pub_;                  // for debug
+  ros::Publisher ceiling_effect_distance_pub_;       // for debug
+  ros::Publisher ceiling_effect_dbar_pub_;           // for debug
+  ros::Publisher ceiling_effect_theta_pub_;          // for debug
+  ros::Publisher ceiling_effect_ratio_pub_;          // for debug
+  ros::Publisher ceiling_effect_scale_pub_;          // for debug
 
   boost::shared_ptr<DeltaRobotModel> delta_robot_model_;
   boost::shared_ptr<DeltaRobotModel> robot_model_for_control_;
@@ -142,8 +147,14 @@ private:
   double nlopt_delta_phi_weight_ = 0.0;
   double nlopt_lambda_balance_weight_ = 0.0;
   std::vector<double> nlopt_phi_nominal_;
+  int ceiling_tilt_mode_ = 0;
+  double ceiling_distance_ = 2.0;
+  double ceiling_rotor_radius_ = 0.1143;
+  double ceiling_effect_min_dbar_ = 0.2;
+  double ceiling_effect_max_theta_ = 0.6981317008;  // 40 deg, model validation range
   std::vector<double> rotor_tilt_;
   std::vector<float> lambda_all_;
+  std::vector<float> ceiling_thrust_scale_;
   std::vector<double> target_gimbal_angles_;
   Eigen::MatrixXd q_mat_;
   Eigen::MatrixXd q_mat_inv_;
@@ -163,6 +174,8 @@ private:
   void rosParamInit();
   void processGimbalAngles();
   void calcYawTerm();
+  std::vector<float> calcCeilingThrustScale();
+  double calcCeilingThrustRatio(double dbar, double theta) const;
 
   /* aerial mode */
   void calcAccFromCog();

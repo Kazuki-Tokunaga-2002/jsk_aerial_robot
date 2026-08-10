@@ -1,8 +1,18 @@
 #include <delta/control/delta_controller.h>
+
+#include <algorithm>
 #include <cmath>
 
 using namespace aerial_robot_model;
 using namespace aerial_robot_control;
+
+namespace
+{
+double clampDouble(double value, double min_value, double max_value)
+{
+  return std::max(min_value, std::min(max_value, value));
+}
+}  // namespace
 
 DeltaController::DeltaController() : PoseLinearController(), torque_allocation_matrix_inv_pub_stamp_(0)
 {
@@ -23,6 +33,7 @@ void DeltaController::initialize(ros::NodeHandle nh, ros::NodeHandle nhp,
 
   rotor_tilt_.resize(motor_num_);
   lambda_all_.resize(motor_num_, 0.0);
+  ceiling_thrust_scale_.resize(motor_num_, 1.0);
   target_gimbal_angles_.resize(motor_num_, 0.0);
   nlopt_phi_nominal_.resize(motor_num_, 0.0);
 
@@ -41,6 +52,11 @@ void DeltaController::initialize(ros::NodeHandle nh, ros::NodeHandle nhp,
   nlopt_result_pub_ = nh.advertise<std_msgs::Int16>("debug/nlopt_result", 1);
   rotor_origin_pub_ = nh.advertise<geometry_msgs::PoseArray>("debug/rotor_origin", 1);
   rotor_normal_pub_ = nh.advertise<geometry_msgs::PoseArray>("debug/rotor_normal", 1);
+  ceiling_effect_distance_pub_ = nh.advertise<std_msgs::Float32MultiArray>("debug/ceiling_effect/d_i", 1);
+  ceiling_effect_dbar_pub_ = nh.advertise<std_msgs::Float32MultiArray>("debug/ceiling_effect/dbar_i", 1);
+  ceiling_effect_theta_pub_ = nh.advertise<std_msgs::Float32MultiArray>("debug/ceiling_effect/theta_i", 1);
+  ceiling_effect_ratio_pub_ = nh.advertise<std_msgs::Float32MultiArray>("debug/ceiling_effect/k_i", 1);
+  ceiling_effect_scale_pub_ = nh.advertise<std_msgs::Float32MultiArray>("debug/ceiling_effect/1_k_i", 1);
 
   q_mat_.resize(6, motor_num_);
   q_mat_inv_.resize(motor_num_, 6);
@@ -93,11 +109,20 @@ void DeltaController::rosParamInit()
   getParam<double>(control_nh, "nlopt_delta_phi_weight", nlopt_delta_phi_weight_, 0.0);
   getParam<double>(control_nh, "nlopt_phi_nominal_weight", nlopt_phi_nominal_weight_, 0.0);
   getParam<double>(control_nh, "nlopt_lambda_balance_weight", nlopt_lambda_balance_weight_, 0.0);
+  getParam<int>(control_nh, "ceiling_tilt", ceiling_tilt_mode_, 0);
+  getParam<double>(control_nh, "ceiling_distance", ceiling_distance_, 2.0);
+  getParam<double>(control_nh, "ceiling_rotor_radius", ceiling_rotor_radius_, 0.1143);
+  getParam<double>(control_nh, "ceiling_effect_min_dbar", ceiling_effect_min_dbar_, 0.2);
+  getParam<double>(control_nh, "ceiling_effect_max_theta", ceiling_effect_max_theta_, 0.6981317008);
 
   double nlopt_phi_nominal = 0.0;
   getParam<double>(control_nh, "nlopt_phi_nominal", nlopt_phi_nominal, 0.0);
   nlopt_phi_limit_ = std::max(1.0e-3, std::min(M_PI, std::abs(nlopt_phi_limit_)));
   std::fill(nlopt_phi_nominal_.begin(), nlopt_phi_nominal_.end(), nlopt_phi_nominal);
+  ceiling_tilt_mode_ = std::max(0, std::min(2, ceiling_tilt_mode_));
+  ceiling_rotor_radius_ = std::max(1.0e-6, ceiling_rotor_radius_);
+  ceiling_effect_min_dbar_ = std::max(1.0e-3, ceiling_effect_min_dbar_);
+  ceiling_effect_max_theta_ = std::max(0.0, std::min(0.5 * M_PI, ceiling_effect_max_theta_));
 
   /* get tilt angle of each thruster */
   auto urdf_model = robot_model_->getUrdfModel();
@@ -251,7 +276,107 @@ void DeltaController::sendFourAxisCommand()
   if (use_fc_for_att_control_)
     flight_command_data.angles[2] = candidate_yaw_term_;
   flight_command_data.base_thrust = lambda_all_;
+  flight_command_data.ceiling_thrust_scale = calcCeilingThrustScale();
   flight_cmd_pub_.publish(flight_command_data);
+}
+
+std::vector<float> DeltaController::calcCeilingThrustScale()
+{
+  std_msgs::Float32MultiArray ceiling_effect_distance_msg;
+  std_msgs::Float32MultiArray ceiling_effect_dbar_msg;
+  std_msgs::Float32MultiArray ceiling_effect_theta_msg;
+  std_msgs::Float32MultiArray ceiling_effect_ratio_msg;
+  std_msgs::Float32MultiArray ceiling_effect_scale_msg;
+  ceiling_effect_distance_msg.data.resize(motor_num_, 0.0);
+  ceiling_effect_dbar_msg.data.resize(motor_num_, 0.0);
+  ceiling_effect_theta_msg.data.resize(motor_num_, 0.0);
+  ceiling_effect_ratio_msg.data.resize(motor_num_, 1.0);
+  ceiling_effect_scale_msg.data.resize(motor_num_, 1.0);
+
+  std::fill(ceiling_thrust_scale_.begin(), ceiling_thrust_scale_.end(), 1.0f);
+  if (ceiling_tilt_mode_ == 0)
+  {
+    ceiling_effect_distance_pub_.publish(ceiling_effect_distance_msg);
+    ceiling_effect_dbar_pub_.publish(ceiling_effect_dbar_msg);
+    ceiling_effect_theta_pub_.publish(ceiling_effect_theta_msg);
+    ceiling_effect_ratio_pub_.publish(ceiling_effect_ratio_msg);
+    ceiling_effect_scale_pub_.publish(ceiling_effect_scale_msg);
+    return ceiling_thrust_scale_;
+  }
+
+  tf::Quaternion cog2baselink_rot;
+  tf::quaternionKDLToTF(robot_model_->getCogDesireOrientation<KDL::Rotation>(), cog2baselink_rot);
+  tf::Matrix3x3 world_rot_from_cog =
+      estimator_->getOrientation(Frame::BASELINK, estimate_mode_) * tf::Matrix3x3(cog2baselink_rot).inverse();
+  tf::Vector3 cog_pos = estimator_->getPos(Frame::COG, estimate_mode_);
+
+  std::vector<Eigen::Vector3d> rotor_origin = robot_model_->getRotorsOriginFromCog<Eigen::Vector3d>();
+  std::vector<Eigen::Vector3d> rotor_normal = robot_model_->getRotorsNormalFromCog<Eigen::Vector3d>();
+  const tf::Vector3 ceiling_normal(0.0, 0.0, 1.0);
+
+  for (int i = 0; i < motor_num_; i++)
+  {
+    const Eigen::Vector3d& origin_cog_eigen = rotor_origin.at(i);
+    tf::Vector3 origin_cog(origin_cog_eigen.x(), origin_cog_eigen.y(), origin_cog_eigen.z());
+    tf::Vector3 origin_world = cog_pos + world_rot_from_cog * origin_cog;
+
+    double distance = ceiling_distance_ - origin_world.z();
+    double dbar = distance / ceiling_rotor_radius_;
+    double theta = 0.0;
+
+    if (ceiling_tilt_mode_ == 2)
+    {
+      const Eigen::Vector3d& normal_cog_eigen = rotor_normal.at(i);
+      tf::Vector3 normal_cog(normal_cog_eigen.x(), normal_cog_eigen.y(), normal_cog_eigen.z());
+      tf::Vector3 normal_world = world_rot_from_cog * normal_cog;
+      if (normal_world.length2() > 1.0e-12)
+      {
+        normal_world.normalize();
+        double dot = std::abs(normal_world.dot(ceiling_normal));
+        theta = std::acos(clampDouble(dot, 0.0, 1.0));
+      }
+    }
+
+    double k = calcCeilingThrustRatio(dbar, theta);
+    if (!std::isfinite(k) || k <= 1.0e-6)
+    {
+      ROS_WARN_THROTTLE(1.0, "[DeltaController] invalid ceiling effect ratio, use scale 1.0");
+      k = 1.0;
+    }
+
+    ceiling_thrust_scale_.at(i) = 1.0f / static_cast<float>(k);
+    ceiling_effect_distance_msg.data.at(i) = static_cast<float>(distance);
+    ceiling_effect_dbar_msg.data.at(i) = static_cast<float>(dbar);
+    ceiling_effect_theta_msg.data.at(i) = static_cast<float>(theta);
+    ceiling_effect_ratio_msg.data.at(i) = static_cast<float>(k);
+    ceiling_effect_scale_msg.data.at(i) = ceiling_thrust_scale_.at(i);
+  }
+
+  ceiling_effect_distance_pub_.publish(ceiling_effect_distance_msg);
+  ceiling_effect_dbar_pub_.publish(ceiling_effect_dbar_msg);
+  ceiling_effect_theta_pub_.publish(ceiling_effect_theta_msg);
+  ceiling_effect_ratio_pub_.publish(ceiling_effect_ratio_msg);
+  ceiling_effect_scale_pub_.publish(ceiling_effect_scale_msg);
+  return ceiling_thrust_scale_;
+}
+
+double DeltaController::calcCeilingThrustRatio(double dbar, double theta) const
+{
+  if (dbar > 2.0)
+    return 1.0;
+
+  double model_dbar = std::max(ceiling_effect_min_dbar_, dbar);
+  double model_theta = std::min(theta, ceiling_effect_max_theta_);
+  double coefficient = -6.8407 + 1.6194 * std::sin(model_theta) + 7.2711 * std::cos(model_theta);
+  double sqrt_term = 1.0 + coefficient / (8.0 * model_dbar * model_dbar);
+
+  if (sqrt_term < 0.0)
+  {
+    ROS_WARN_THROTTLE(1.0, "[DeltaController] ceiling effect model sqrt term is negative, use ratio 1.0");
+    return 1.0;
+  }
+
+  return 0.5 + 0.5 * std::sqrt(sqrt_term);
 }
 
 void DeltaController::sendTorqueAllocationMatrixInv()

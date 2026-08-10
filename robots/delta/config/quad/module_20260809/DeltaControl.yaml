@@ -13,6 +13,10 @@ controller:
   nlopt_phi_nominal: 0.0 # preferred gimbal angle [rad]
   nlopt_phi_nominal_weight: 1.0 # preferred gimbal angle cost
   nlopt_lambda_balance_weight: 0.0 # rotor thrust balance cost
+  ceiling_distance: 2.73 # ceiling height d0 in world z [m]
+  ceiling_rotor_radius: 0.1905 # rotor radius R [m] for 15 inch prop
+  ceiling_effect_min_dbar: 0.2 # lower l/R bound of the ceiling effect model
+  ceiling_effect_max_theta: 0.6981317008 # upper tilt angle bound [rad] (40 deg)
 
   xy:
     p_gain: 5.0

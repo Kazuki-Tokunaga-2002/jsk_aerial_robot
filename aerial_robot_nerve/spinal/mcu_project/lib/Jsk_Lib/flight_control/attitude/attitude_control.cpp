@@ -11,6 +11,8 @@
 
 #include "flight_control/attitude/attitude_control.h"
 
+#include <cmath>
+
 #ifdef SIMULATION
 #include <sensor_msgs/JointState.h>
 AttitudeController::AttitudeController(): DELTA_T(0), prev_time_(-1), sim_voltage_(0)
@@ -440,6 +442,7 @@ void AttitudeController::reset(void)
       pwm_test_value_[i] = IDLE_DUTY;
 
       base_thrust_term_[i] = 0;
+      ceiling_thrust_scale_[i] = 1.0f;
       roll_pitch_term_[i] = 0;
       yaw_term_[i] = 0;
       extra_yaw_pi_term_[i] = 0;
@@ -499,10 +502,22 @@ void AttitudeController::fourAxisCommandCallback( const spinal::FourAxisCommand 
       ROS_ERROR("fource axis commnd: motor number is not identical between fc(%d) and pc(%ld)", motor_number_, cmd_msg.base_thrust.size());
       return;
     }
+  bool use_ceiling_thrust_scale = !cmd_msg.ceiling_thrust_scale.empty();
+  if(use_ceiling_thrust_scale && cmd_msg.ceiling_thrust_scale.size() != motor_number_)
+    {
+      ROS_ERROR("fource axis commnd: ceiling thrust scale number is not identical between fc(%d) and pc(%ld)", motor_number_, cmd_msg.ceiling_thrust_scale.size());
+      return;
+    }
 #else
   if(cmd_msg.base_thrust_length != motor_number_)
     {
       nh_->logerror("fource axis commnd: motor number is not identical between fc and pc");
+      return;
+    }
+  bool use_ceiling_thrust_scale = cmd_msg.ceiling_thrust_scale_length > 0;
+  if(use_ceiling_thrust_scale && cmd_msg.ceiling_thrust_scale_length != motor_number_)
+    {
+      nh_->logerror("fource axis commnd: ceiling thrust scale number is not identical between fc and pc");
       return;
     }
 #endif
@@ -528,11 +543,17 @@ void AttitudeController::fourAxisCommandCallback( const spinal::FourAxisCommand 
   target_angle_[X] = cmd_msg.angles[0];
   target_angle_[Y] = cmd_msg.angles[1];
   int max_yaw_term_index = max_yaw_term_index_;
-  float max_yaw_thrust_d_gain = thrust_d_gain_[max_yaw_term_index][Z];
+  float max_yaw_thrust_d_gain = 1.0f;
+  if(max_yaw_term_index != -1) max_yaw_thrust_d_gain = thrust_d_gain_[max_yaw_term_index][Z];
   for(int i = 0; i < motor_number_; i++)
     {
+      float scale = 1.0f;
+      if(use_ceiling_thrust_scale) scale = cmd_msg.ceiling_thrust_scale[i];
+      if(!std::isfinite(scale) || scale <= 0.0f) scale = 1.0f;
+      ceiling_thrust_scale_[i] = scale;
+
       // base thrust is about the z control
-      base_thrust_term_[i] = cmd_msg.base_thrust[i];
+      base_thrust_term_[i] = cmd_msg.base_thrust[i] * ceiling_thrust_scale_[i];
 
       // reconstruct the pi term for yaw (temporary measure for pwm saturation avoidance)
       if(max_yaw_term_index != -1)

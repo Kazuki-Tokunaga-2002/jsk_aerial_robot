@@ -188,6 +188,7 @@ private:
   float thrust_d_gain_[MAX_MOTOR_NUMBER][3];
   float torque_allocation_matrix_inv_[MAX_MOTOR_NUMBER][3];
   float base_thrust_term_[MAX_MOTOR_NUMBER]; //[N]
+  float ceiling_thrust_scale_[MAX_MOTOR_NUMBER];
   float roll_pitch_term_[MAX_MOTOR_NUMBER]; //[N]
   float yaw_term_[MAX_MOTOR_NUMBER]; //[N]
   float extra_yaw_pi_term_[MAX_MOTOR_NUMBER]; //[N]
