@@ -112,8 +112,8 @@ void DeltaController::nonlinearWrenchAllocation()
   {
     lb.at(i) = 0;
     ub.at(i) = robot_model_->getThrustUpperLimit();
-    lb.at(i + motor_num_) = -M_PI;
-    ub.at(i + motor_num_) = M_PI;
+    lb.at(i + motor_num_) = -nlopt_phi_limit_;
+    ub.at(i + motor_num_) = nlopt_phi_limit_;
   }
 
   slsqp_solver.set_lower_bounds(lb);
@@ -132,7 +132,7 @@ void DeltaController::nonlinearWrenchAllocation()
   }
 
   double max_val;
-  nlopt::result result;
+  nlopt::result result = nlopt::FAILURE;
   try
   {
     result = slsqp_solver.optimize(opt_x, max_val);
@@ -140,6 +140,7 @@ void DeltaController::nonlinearWrenchAllocation()
   }
   catch (std::runtime_error error)
   {
+    nlopt_result_ = result;
   }
 
   if (result < 0)

@@ -1,4 +1,5 @@
 #include <delta/control/delta_controller.h>
+#include <cmath>
 
 using namespace aerial_robot_model;
 using namespace aerial_robot_control;
@@ -23,6 +24,7 @@ void DeltaController::initialize(ros::NodeHandle nh, ros::NodeHandle nhp,
   rotor_tilt_.resize(motor_num_);
   lambda_all_.resize(motor_num_, 0.0);
   target_gimbal_angles_.resize(motor_num_, 0.0);
+  nlopt_phi_nominal_.resize(motor_num_, 0.0);
 
   rosParamInit();
 
@@ -85,6 +87,17 @@ void DeltaController::rosParamInit()
   getParam<bool>(control_nh, "hovering_approximate", hovering_approximate_, false);
   getParam<bool>(control_nh, "use_fc_for_att_control", use_fc_for_att_control_, true);
   getParam<bool>(control_nh, "linear_mode", linear_mode_, false);
+  getParam<double>(control_nh, "nlopt_phi_limit", nlopt_phi_limit_, M_PI);
+  getParam<double>(control_nh, "nlopt_lambda_weight", nlopt_lambda_weight_, 1.0);
+  getParam<double>(control_nh, "nlopt_delta_lambda_weight", nlopt_delta_lambda_weight_, 0.0);
+  getParam<double>(control_nh, "nlopt_delta_phi_weight", nlopt_delta_phi_weight_, 0.0);
+  getParam<double>(control_nh, "nlopt_phi_nominal_weight", nlopt_phi_nominal_weight_, 0.0);
+  getParam<double>(control_nh, "nlopt_lambda_balance_weight", nlopt_lambda_balance_weight_, 0.0);
+
+  double nlopt_phi_nominal = 0.0;
+  getParam<double>(control_nh, "nlopt_phi_nominal", nlopt_phi_nominal, 0.0);
+  nlopt_phi_limit_ = std::max(1.0e-3, std::min(M_PI, std::abs(nlopt_phi_limit_)));
+  std::fill(nlopt_phi_nominal_.begin(), nlopt_phi_nominal_.end(), nlopt_phi_nominal);
 
   /* get tilt angle of each thruster */
   auto urdf_model = robot_model_->getUrdfModel();

@@ -3,9 +3,16 @@ aerial_robot_control_name: aerial_robot_control/delta_controller
 controller:
   control_verbose: false
   hovering_approximate: false
-  aerial_mode_add_joint_torque_constraint: false
-  use_fc_for_att_control: false
-  linear_mode: true
+  aerial_mode_add_joint_torque_constraint: false # joint torque constraints
+  use_fc_for_att_control: false # attitude feedback by Spinal
+  linear_mode: false # nonlinear NLOpt/SLSQP wrench allocation
+  nlopt_phi_limit: 1.0471975512 # gimbal angle bound [rad] (pi/3)
+  nlopt_lambda_weight: 1.0 # thrust effort cost
+  nlopt_delta_lambda_weight: 0.0 # thrust command smoothing cost
+  nlopt_delta_phi_weight: 0.0 # gimbal command smoothing cost
+  nlopt_phi_nominal: 0.0 # preferred gimbal angle [rad]
+  nlopt_phi_nominal_weight: 1.0 # preferred gimbal angle cost
+  nlopt_lambda_balance_weight: 0.0 # rotor thrust balance cost
 
   xy:
     p_gain: 5.0

@@ -71,6 +71,38 @@ public:
   {
     return nlopt_log_;
   }
+  const std::vector<float>& getLambdaAll()
+  {
+    return lambda_all_;
+  }
+  const std::vector<double>& getTargetGimbalAngles()
+  {
+    return target_gimbal_angles_;
+  }
+  const std::vector<double>& getNLOptPhiNominal()
+  {
+    return nlopt_phi_nominal_;
+  }
+  double getNLOptLambdaWeight()
+  {
+    return nlopt_lambda_weight_;
+  }
+  double getNLOptDeltaLambdaWeight()
+  {
+    return nlopt_delta_lambda_weight_;
+  }
+  double getNLOptPhiNominalWeight()
+  {
+    return nlopt_phi_nominal_weight_;
+  }
+  double getNLOptDeltaPhiWeight()
+  {
+    return nlopt_delta_phi_weight_;
+  }
+  double getNLOptLambdaBalanceWeight()
+  {
+    return nlopt_lambda_balance_weight_;
+  }
 
   /* ros callbacks */
   void jointStateCallback(const sensor_msgs::JointStateConstPtr& msg);
@@ -100,9 +132,16 @@ private:
   bool use_fc_for_att_control_ = true;
   bool linear_mode_ = true;
   bool first_run_;
-  int nlopt_result_;
+  int nlopt_result_ = nlopt::FAILURE;
   int nlopt_iterations_ = 0;
   std::vector<float> nlopt_log_;
+  double nlopt_phi_limit_ = 3.14159265358979323846;
+  double nlopt_lambda_weight_ = 1.0;
+  double nlopt_delta_lambda_weight_ = 0.0;
+  double nlopt_phi_nominal_weight_ = 0.0;
+  double nlopt_delta_phi_weight_ = 0.0;
+  double nlopt_lambda_balance_weight_ = 0.0;
+  std::vector<double> nlopt_phi_nominal_;
   std::vector<double> rotor_tilt_;
   std::vector<float> lambda_all_;
   std::vector<double> target_gimbal_angles_;

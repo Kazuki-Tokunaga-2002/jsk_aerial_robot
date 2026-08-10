@@ -1,7 +1,16 @@
 #include <delta/control/delta_wrench_allocation.h>
 #include <nlopt.hpp>
+#include <cmath>
 
 using namespace aerial_robot_control;
+
+namespace
+{
+double angleDiff(double from, double to)
+{
+  return std::atan2(std::sin(from - to), std::cos(from - to));
+}
+}  // namespace
 
 double nonlinearWrenchAllocationMinObjective(const std::vector<double>& x, std::vector<double>& grad, void* ptr)
 {
@@ -15,24 +24,55 @@ double nonlinearWrenchAllocationMinObjective(const std::vector<double>& x, std::
 
   double ret = 0;
   int motor_num = robot_model_for_control->getRotorNum();
+  const auto& prev_lambda = controller->getLambdaAll();
+  const auto& prev_phi = controller->getTargetGimbalAngles();
+  const auto& nominal_phi = controller->getNLOptPhiNominal();
+  const double lambda_weight = controller->getNLOptLambdaWeight();
+  const double delta_lambda_weight = controller->getNLOptDeltaLambdaWeight();
+  const double phi_nominal_weight = controller->getNLOptPhiNominalWeight();
+  const double delta_phi_weight = controller->getNLOptDeltaPhiWeight();
+  const double lambda_balance_weight = controller->getNLOptLambdaBalanceWeight();
+  double lambda_mean = 0.0;
+
+  if (lambda_balance_weight > 0.0)
+  {
+    for (int i = 0; i < motor_num; i++)
+      lambda_mean += x.at(i);
+    lambda_mean /= motor_num;
+  }
 
   /* compute result */
-  // f = sum(lambda_i * lambda_i)
   for (int i = 0; i < motor_num; i++)
   {
-    ret += x.at(i) * x.at(i);
+    const double lambda = x.at(i);
+    const double phi = x.at(i + motor_num);
+    const double d_lambda = lambda - prev_lambda.at(i);
+    const double d_phi = angleDiff(phi, prev_phi.at(i));
+    const double d_nominal_phi = angleDiff(phi, nominal_phi.at(i));
+    const double d_balance_lambda = lambda - lambda_mean;
+
+    ret += lambda_weight * lambda * lambda;
+    ret += delta_lambda_weight * d_lambda * d_lambda;
+    ret += delta_phi_weight * d_phi * d_phi;
+    ret += phi_nominal_weight * d_nominal_phi * d_nominal_phi;
+    ret += lambda_balance_weight * d_balance_lambda * d_balance_lambda;
   }
 
   if (grad.empty())
     return ret;
 
   /* make gradient */
-  // df/dlambda_i = 2 * lambda_i
-  // df/dphi_i = 0
   for (int i = 0; i < motor_num; i++)
   {
-    grad.at(i) = 2 * x.at(i);
-    grad.at(i + motor_num) = 0;
+    const double lambda = x.at(i);
+    const double phi = x.at(i + motor_num);
+
+    grad.at(i) = 2.0 * lambda_weight * lambda;
+    grad.at(i) += 2.0 * delta_lambda_weight * (lambda - prev_lambda.at(i));
+    grad.at(i) += 2.0 * lambda_balance_weight * (lambda - lambda_mean);
+
+    grad.at(i + motor_num) = 2.0 * delta_phi_weight * angleDiff(phi, prev_phi.at(i));
+    grad.at(i + motor_num) += 2.0 * phi_nominal_weight * angleDiff(phi, nominal_phi.at(i));
   }
   return ret;
 }

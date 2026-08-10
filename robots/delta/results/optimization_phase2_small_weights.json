@@ -1,0 +1,2458 @@
+{
+  "manifest": {
+    "finished_at": "2026-08-10T02:01:09+0900",
+    "phase": "phase2_small_weights",
+    "runs": [
+      {
+        "attempt": 1,
+        "bag": "/tmp/delta_opt_eval_20260810/phase2_small_weights/p2_baseline_repeat/attempt_1/bags/p2_baseline_repeat.bag",
+        "config_dir": "/tmp/delta_opt_eval_20260810/phase2_small_weights/p2_baseline_repeat/attempt_1/config",
+        "name": "p2_baseline_repeat",
+        "ok": true,
+        "params": {
+          "nlopt_delta_lambda_weight": 0.0,
+          "nlopt_delta_phi_weight": 0.0,
+          "nlopt_lambda_balance_weight": 0.0,
+          "nlopt_lambda_weight": 1.0,
+          "nlopt_phi_limit": 1.0471975512,
+          "nlopt_phi_nominal": 0.0,
+          "nlopt_phi_nominal_weight": 0.0
+        },
+        "ready": true,
+        "ready_reason": "ready",
+        "run_dir": "/tmp/delta_opt_eval_20260810/phase2_small_weights/p2_baseline_repeat/attempt_1",
+        "runner_returncode": 0
+      },
+      {
+        "attempt": 1,
+        "bag": "/tmp/delta_opt_eval_20260810/phase2_small_weights/p2_delta_phi_1/attempt_1/bags/p2_delta_phi_1.bag",
+        "config_dir": "/tmp/delta_opt_eval_20260810/phase2_small_weights/p2_delta_phi_1/attempt_1/config",
+        "name": "p2_delta_phi_1",
+        "ok": true,
+        "params": {
+          "nlopt_delta_lambda_weight": 0.0,
+          "nlopt_delta_phi_weight": 1.0,
+          "nlopt_lambda_balance_weight": 0.0,
+          "nlopt_lambda_weight": 1.0,
+          "nlopt_phi_limit": 1.0471975512,
+          "nlopt_phi_nominal": 0.0,
+          "nlopt_phi_nominal_weight": 0.0
+        },
+        "ready": true,
+        "ready_reason": "ready",
+        "run_dir": "/tmp/delta_opt_eval_20260810/phase2_small_weights/p2_delta_phi_1/attempt_1",
+        "runner_returncode": 0
+      },
+      {
+        "attempt": 2,
+        "bag": "/tmp/delta_opt_eval_20260810/phase2_small_weights/p2_delta_phi_3/attempt_2/bags/p2_delta_phi_3.bag",
+        "config_dir": "/tmp/delta_opt_eval_20260810/phase2_small_weights/p2_delta_phi_3/attempt_2/config",
+        "name": "p2_delta_phi_3",
+        "ok": true,
+        "params": {
+          "nlopt_delta_lambda_weight": 0.0,
+          "nlopt_delta_phi_weight": 3.0,
+          "nlopt_lambda_balance_weight": 0.0,
+          "nlopt_lambda_weight": 1.0,
+          "nlopt_phi_limit": 1.0471975512,
+          "nlopt_phi_nominal": 0.0,
+          "nlopt_phi_nominal_weight": 0.0
+        },
+        "ready": true,
+        "ready_reason": "ready",
+        "run_dir": "/tmp/delta_opt_eval_20260810/phase2_small_weights/p2_delta_phi_3/attempt_2",
+        "runner_returncode": 0
+      },
+      {
+        "attempt": 2,
+        "bag": "/tmp/delta_opt_eval_20260810/phase2_small_weights/p2_phi_nominal_1/attempt_2/bags/p2_phi_nominal_1.bag",
+        "config_dir": "/tmp/delta_opt_eval_20260810/phase2_small_weights/p2_phi_nominal_1/attempt_2/config",
+        "name": "p2_phi_nominal_1",
+        "ok": true,
+        "params": {
+          "nlopt_delta_lambda_weight": 0.0,
+          "nlopt_delta_phi_weight": 0.0,
+          "nlopt_lambda_balance_weight": 0.0,
+          "nlopt_lambda_weight": 1.0,
+          "nlopt_phi_limit": 1.0471975512,
+          "nlopt_phi_nominal": 0.0,
+          "nlopt_phi_nominal_weight": 1.0
+        },
+        "ready": true,
+        "ready_reason": "ready",
+        "run_dir": "/tmp/delta_opt_eval_20260810/phase2_small_weights/p2_phi_nominal_1/attempt_2",
+        "runner_returncode": 0
+      },
+      {
+        "attempt": 1,
+        "bag": "/tmp/delta_opt_eval_20260810/phase2_small_weights/p2_combo_phi1_nom1/attempt_1/bags/p2_combo_phi1_nom1.bag",
+        "config_dir": "/tmp/delta_opt_eval_20260810/phase2_small_weights/p2_combo_phi1_nom1/attempt_1/config",
+        "name": "p2_combo_phi1_nom1",
+        "ok": true,
+        "params": {
+          "nlopt_delta_lambda_weight": 0.0,
+          "nlopt_delta_phi_weight": 1.0,
+          "nlopt_lambda_balance_weight": 0.0,
+          "nlopt_lambda_weight": 1.0,
+          "nlopt_phi_limit": 1.0471975512,
+          "nlopt_phi_nominal": 0.0,
+          "nlopt_phi_nominal_weight": 1.0
+        },
+        "ready": true,
+        "ready_reason": "ready",
+        "run_dir": "/tmp/delta_opt_eval_20260810/phase2_small_weights/p2_combo_phi1_nom1/attempt_1",
+        "runner_returncode": 0
+      }
+    ],
+    "spec": {
+      "description": "Tune smaller phi-related objective weights after phase1. Delta lambda was dropped because it degraded tracking.",
+      "phase": "phase2_small_weights",
+      "variants": [
+        {
+          "name": "p2_baseline_repeat",
+          "params": {
+            "nlopt_delta_lambda_weight": 0.0,
+            "nlopt_delta_phi_weight": 0.0,
+            "nlopt_lambda_balance_weight": 0.0,
+            "nlopt_lambda_weight": 1.0,
+            "nlopt_phi_limit": 1.0471975512,
+            "nlopt_phi_nominal": 0.0,
+            "nlopt_phi_nominal_weight": 0.0
+          }
+        },
+        {
+          "name": "p2_delta_phi_1",
+          "params": {
+            "nlopt_delta_lambda_weight": 0.0,
+            "nlopt_delta_phi_weight": 1.0,
+            "nlopt_lambda_balance_weight": 0.0,
+            "nlopt_lambda_weight": 1.0,
+            "nlopt_phi_limit": 1.0471975512,
+            "nlopt_phi_nominal": 0.0,
+            "nlopt_phi_nominal_weight": 0.0
+          }
+        },
+        {
+          "name": "p2_delta_phi_3",
+          "params": {
+            "nlopt_delta_lambda_weight": 0.0,
+            "nlopt_delta_phi_weight": 3.0,
+            "nlopt_lambda_balance_weight": 0.0,
+            "nlopt_lambda_weight": 1.0,
+            "nlopt_phi_limit": 1.0471975512,
+            "nlopt_phi_nominal": 0.0,
+            "nlopt_phi_nominal_weight": 0.0
+          }
+        },
+        {
+          "name": "p2_phi_nominal_1",
+          "params": {
+            "nlopt_delta_lambda_weight": 0.0,
+            "nlopt_delta_phi_weight": 0.0,
+            "nlopt_lambda_balance_weight": 0.0,
+            "nlopt_lambda_weight": 1.0,
+            "nlopt_phi_limit": 1.0471975512,
+            "nlopt_phi_nominal": 0.0,
+            "nlopt_phi_nominal_weight": 1.0
+          }
+        },
+        {
+          "name": "p2_combo_phi1_nom1",
+          "params": {
+            "nlopt_delta_lambda_weight": 0.0,
+            "nlopt_delta_phi_weight": 1.0,
+            "nlopt_lambda_balance_weight": 0.0,
+            "nlopt_lambda_weight": 1.0,
+            "nlopt_phi_limit": 1.0471975512,
+            "nlopt_phi_nominal": 0.0,
+            "nlopt_phi_nominal_weight": 1.0
+          }
+        }
+      ]
+    },
+    "started_at": "2026-08-10T01:48:20+0900"
+  },
+  "phase": "phase2_small_weights",
+  "rows": [
+    {
+      "analysis": {
+        "bag": "/tmp/delta_opt_eval_20260810/phase2_small_weights/p2_baseline_repeat/attempt_1/bags/p2_baseline_repeat.bag",
+        "by_phase": {
+          "circle": {
+            "flight_state_counts": {
+              "5": 4448
+            },
+            "gimbal": {
+              "abs_phi": {
+                "max": 0.06452695169246489,
+                "mean": 0.023676473513826932,
+                "n": 17792,
+                "p95": 0.04368790427163945,
+                "rms": 0.02795973894022357,
+                "std": 0.014871839279474011
+              },
+              "jump_gt_0p2": 0,
+              "jump_gt_0p5": 0,
+              "per_gimbal_abs_max": [
+                0.06452695169246489,
+                0.032907513569538804,
+                0.05380760288689091,
+                0.038692078668134684
+              ],
+              "samples": 4448,
+              "wrapped_step_abs": {
+                "max": 0.022728159609780807,
+                "mean": 0.0021644037099231273,
+                "n": 17788,
+                "p95": 0.008328072924722284,
+                "rms": 0.003657563497555837,
+                "std": 0.0029484109820586226
+              }
+            },
+            "nlopt_iterations": {
+              "max": 17.0,
+              "mean": 8.09240107913669,
+              "n": 4448,
+              "p95": 12.0,
+              "rms": 8.864956572706445,
+              "std": 3.619461259684727
+            },
+            "nlopt_lambda": {
+              "all": {
+                "max": 9.204933166503906,
+                "mean": 8.086964340786711,
+                "n": 17792,
+                "p95": 9.026931142807006,
+                "rms": 8.11268666719956,
+                "std": 0.6455173979078173
+              },
+              "max": 9.204933166503906
+            },
+            "nlopt_phi": {
+              "all_abs": {
+                "max": 0.06452695280313492,
+                "mean": 0.02367647349960624,
+                "n": 17792,
+                "p95": 0.043687904626131056,
+                "rms": 0.0279597389203475,
+                "std": 0.014871839264745917
+              },
+              "max_abs": 0.06452695280313492
+            },
+            "nlopt_result": {
+              "counts": {
+                "3": 4413,
+                "4": 35
+              },
+              "fallback_or_fail": 0,
+              "samples": 4448,
+              "success_rate": 1.0
+            },
+            "thrust": {
+              "imbalance_std": {
+                "max": 0.7171388900648397,
+                "mean": 0.6449098798747293,
+                "n": 4448,
+                "p95": 0.6809634771101802,
+                "rms": 0.6452574159267254,
+                "std": 0.02117497693971115
+              },
+              "max_single": 9.204933166503906,
+              "min_single": 6.96449613571167,
+              "samples": 4448,
+              "sum_square": {
+                "max": 267.35632551724416,
+                "mean": 263.26273984063005,
+                "n": 4448,
+                "p95": 265.1351817490689,
+                "rms": 263.26513580500404,
+                "std": 1.1231838816184065
+              },
+              "total": {
+                "max": 32.61444807052612,
+                "mean": 32.347857363146844,
+                "n": 4448,
+                "p95": 32.47028291225433,
+                "rms": 32.347940355416526,
+                "std": 0.07327517377602556
+              }
+            },
+            "tracking": {
+              "pos_abs": {
+                "max": 0.031042635863798424,
+                "mean": 0.005038873407572936,
+                "n": 4448,
+                "p95": 0.009684971161029447,
+                "rms": 0.006246924633124916,
+                "std": 0.0036924005950596923
+              },
+              "samples": 4448,
+              "xy_abs": {
+                "max": 0.030958186028094067,
+                "mean": 0.0048534410286295,
+                "n": 4448,
+                "p95": 0.009410495940936047,
+                "rms": 0.00612335734363283,
+                "std": 0.00373357942723038
+              },
+              "yaw_abs": {
+                "max": 0.06425869464874268,
+                "mean": 0.006784190353401197,
+                "n": 4448,
+                "p95": 0.03347495216876268,
+                "rms": 0.012044874264245333,
+                "std": 0.009952575409927708
+              },
+              "z_abs": {
+                "max": 0.0044010658748447895,
+                "mean": 0.0009794967482316575,
+                "n": 4448,
+                "p95": 0.0023934772703796624,
+                "rms": 0.0012363503605858487,
+                "std": 0.0007544192033109757
+              }
+            }
+          },
+          "hover": {
+            "flight_state_counts": {
+              "5": 1249
+            },
+            "gimbal": {
+              "abs_phi": {
+                "max": 0.06314863574846913,
+                "mean": 0.025839172065072726,
+                "n": 4996,
+                "p95": 0.04754975747492399,
+                "rms": 0.02814006327884349,
+                "std": 0.011144521000423532
+              },
+              "jump_gt_0p2": 0,
+              "jump_gt_0p5": 0,
+              "per_gimbal_abs_max": [
+                0.06314863574846913,
+                0.02924077276408103,
+                0.06228838967298017,
+                0.03643152944041546
+              ],
+              "samples": 1249,
+              "wrapped_step_abs": {
+                "max": 0.019607980818103332,
+                "mean": 0.001883600568777953,
+                "n": 4992,
+                "p95": 0.00779266021296623,
+                "rms": 0.0033898416756180764,
+                "std": 0.0028183462319339935
+              }
+            },
+            "nlopt_iterations": {
+              "max": 17.0,
+              "mean": 8.253002401921536,
+              "n": 1249,
+              "p95": 12.0,
+              "rms": 8.804795258018695,
+              "std": 3.0679587496421528
+            },
+            "nlopt_lambda": {
+              "all": {
+                "max": 9.120083808898926,
+                "mean": 8.09115110004874,
+                "n": 4996,
+                "p95": 9.031437635421753,
+                "rms": 8.116777626874297,
+                "std": 0.6444787974070169
+              },
+              "max": 9.120083808898926
+            },
+            "nlopt_phi": {
+              "all_abs": {
+                "max": 0.063148632645607,
+                "mean": 0.02583917205481439,
+                "n": 4996,
+                "p95": 0.04754975717514753,
+                "rms": 0.02814006326978929,
+                "std": 0.011144521001346068
+              },
+              "max_abs": 0.063148632645607
+            },
+            "nlopt_result": {
+              "counts": {
+                "3": 1240,
+                "4": 9
+              },
+              "fallback_or_fail": 0,
+              "samples": 1249,
+              "success_rate": 1.0
+            },
+            "thrust": {
+              "imbalance_std": {
+                "max": 0.7072858297951304,
+                "mean": 0.6437202804295717,
+                "n": 1249,
+                "p95": 0.6792911933165189,
+                "rms": 0.6440739864040423,
+                "std": 0.021342458294867157
+              },
+              "max_single": 9.120083808898926,
+              "min_single": 7.000251770019531,
+              "samples": 1249,
+              "sum_square": {
+                "max": 269.1493295309185,
+                "mean": 263.5283161765085,
+                "n": 1249,
+                "p95": 266.1646099976448,
+                "rms": 263.5322797076769,
+                "std": 1.4453446299712633
+              },
+              "total": {
+                "max": 32.715988636016846,
+                "mean": 32.36460440019496,
+                "n": 1249,
+                "p95": 32.526830959320066,
+                "rms": 32.364733335942006,
+                "std": 0.09135603711195285
+              }
+            },
+            "tracking": {
+              "pos_abs": {
+                "max": 0.06884994882097908,
+                "mean": 0.03375555737895526,
+                "n": 1249,
+                "p95": 0.06618138936938922,
+                "rms": 0.037459465704863526,
+                "std": 0.01624111809358906
+              },
+              "samples": 1249,
+              "xy_abs": {
+                "max": 0.06291139786013847,
+                "mean": 0.03126910747953068,
+                "n": 1249,
+                "p95": 0.06022891337405003,
+                "rms": 0.03442151372474222,
+                "std": 0.014390396955476099
+              },
+              "yaw_abs": {
+                "max": 0.005702517926692963,
+                "mean": 0.001692187857706762,
+                "n": 1249,
+                "p95": 0.004161689896136521,
+                "rms": 0.0021037830040703132,
+                "std": 0.0012499612723780333
+              },
+              "z_abs": {
+                "max": 0.029927266761660576,
+                "mean": 0.012470311367603912,
+                "n": 1249,
+                "p95": 0.027125803008675575,
+                "rms": 0.01477738013963334,
+                "std": 0.007928574789092835
+              }
+            }
+          },
+          "post_hover": {
+            "flight_state_counts": {
+              "5": 652
+            },
+            "gimbal": {
+              "abs_phi": {
+                "max": 0.05751380775796741,
+                "mean": 0.020499019402520156,
+                "n": 2608,
+                "p95": 0.043874080592781764,
+                "rms": 0.02586783480346749,
+                "std": 0.01577767666529474
+              },
+              "jump_gt_0p2": 0,
+              "jump_gt_0p5": 0,
+              "per_gimbal_abs_max": [
+                0.05751380775796741,
+                0.01973612952327059,
+                0.05126773854241742,
+                0.025157085351099492
+              ],
+              "samples": 652,
+              "wrapped_step_abs": {
+                "max": 0.019657451039146956,
+                "mean": 0.001996158776835464,
+                "n": 2604,
+                "p95": 0.008391027229169953,
+                "rms": 0.0035729677397899166,
+                "std": 0.002963350908556429
+              }
+            },
+            "nlopt_iterations": {
+              "max": 16.0,
+              "mean": 8.110429447852761,
+              "n": 652,
+              "p95": 12.0,
+              "rms": 8.867981974185476,
+              "std": 3.586368423054342
+            },
+            "nlopt_lambda": {
+              "all": {
+                "max": 9.231619834899902,
+                "mean": 8.086429698335612,
+                "n": 2608,
+                "p95": 9.121009254455567,
+                "rms": 8.112434214577833,
+                "std": 0.6490328340915337
+              },
+              "max": 9.231619834899902
+            },
+            "nlopt_phi": {
+              "all_abs": {
+                "max": 0.05751380696892738,
+                "mean": 0.02049901940883975,
+                "n": 2608,
+                "p95": 0.04387407954782248,
+                "rms": 0.0258678348129697,
+                "std": 0.01577767667266313
+              },
+              "max_abs": 0.05751380696892738
+            },
+            "nlopt_result": {
+              "counts": {
+                "3": 648,
+                "4": 4
+              },
+              "fallback_or_fail": 0,
+              "samples": 652,
+              "success_rate": 1.0
+            },
+            "thrust": {
+              "imbalance_std": {
+                "max": 0.7123950618935109,
+                "mean": 0.64841822673645,
+                "n": 652,
+                "p95": 0.6836870388540978,
+                "rms": 0.6487710350401239,
+                "std": 0.021392969475773058
+              },
+              "max_single": 9.231619834899902,
+              "min_single": 6.911436080932617,
+              "samples": 652,
+              "sum_square": {
+                "max": 266.3851182027058,
+                "mean": 263.24635554341234,
+                "n": 652,
+                "p95": 265.20263268411946,
+                "rms": 263.2487930956961,
+                "std": 1.1328545590593868
+              },
+              "total": {
+                "max": 32.552563190460205,
+                "mean": 32.34571879334245,
+                "n": 652,
+                "p95": 32.47593901157379,
+                "rms": 32.34580282631947,
+                "std": 0.07373073409151096
+              }
+            },
+            "tracking": {
+              "pos_abs": {
+                "max": 0.025949792815094134,
+                "mean": 0.007223376240099604,
+                "n": 652,
+                "p95": 0.016268732901881175,
+                "rms": 0.009014251312812197,
+                "std": 0.005392546932990099
+              },
+              "samples": 652,
+              "xy_abs": {
+                "max": 0.025947914180964933,
+                "mean": 0.007071171186396782,
+                "n": 652,
+                "p95": 0.016240228673664314,
+                "rms": 0.008951391986465924,
+                "std": 0.005488711738471818
+              },
+              "yaw_abs": {
+                "max": 0.07055980712175369,
+                "mean": 0.03277765493601725,
+                "n": 652,
+                "p95": 0.0643997024744749,
+                "rms": 0.0398341907487558,
+                "std": 0.02263599102101885
+              },
+              "z_abs": {
+                "max": 0.004251574166119099,
+                "mean": 0.0008318841670827582,
+                "n": 652,
+                "p95": 0.002185499342158436,
+                "rms": 0.001062689152654734,
+                "std": 0.0006612692097225326
+              }
+            }
+          }
+        },
+        "phases": {
+          "arm": 6.955,
+          "circle": 37.557,
+          "done": 69.384,
+          "hover": 29.31,
+          "land": 67.057,
+          "post_hover": 61.795,
+          "takeoff": 7.257
+        },
+        "topics": {
+          "flight_state": 13426,
+          "gimbal": 12364,
+          "nlopt_iter": 12362,
+          "nlopt_log": 12361,
+          "nlopt_result": 12362,
+          "pid": 12362,
+          "thrust": 12362
+        },
+        "windows": {
+          "circle": [
+            38.557,
+            60.795
+          ],
+          "hover": [
+            30.31,
+            36.557
+          ],
+          "post_hover": [
+            62.795,
+            66.057
+          ]
+        }
+      },
+      "bag": "/tmp/delta_opt_eval_20260810/phase2_small_weights/p2_baseline_repeat/attempt_1/bags/p2_baseline_repeat.bag",
+      "name": "p2_baseline_repeat",
+      "params": {
+        "nlopt_delta_lambda_weight": 0.0,
+        "nlopt_delta_phi_weight": 0.0,
+        "nlopt_lambda_balance_weight": 0.0,
+        "nlopt_lambda_weight": 1.0,
+        "nlopt_phi_limit": 1.0471975512,
+        "nlopt_phi_nominal": 0.0,
+        "nlopt_phi_nominal_weight": 0.0
+      },
+      "score": 15.433803469831112
+    },
+    {
+      "analysis": {
+        "bag": "/tmp/delta_opt_eval_20260810/phase2_small_weights/p2_delta_phi_1/attempt_1/bags/p2_delta_phi_1.bag",
+        "by_phase": {
+          "circle": {
+            "flight_state_counts": {
+              "5": 4448
+            },
+            "gimbal": {
+              "abs_phi": {
+                "max": 0.0587480794510191,
+                "mean": 0.024143545602965576,
+                "n": 17792,
+                "p95": 0.043489838717509055,
+                "rms": 0.028022492649257894,
+                "std": 0.014224953426821276
+              },
+              "jump_gt_0p2": 0,
+              "jump_gt_0p5": 0,
+              "per_gimbal_abs_max": [
+                0.0587480794510191,
+                0.034027263522114375,
+                0.05407062246594585,
+                0.03929095263880513
+              ],
+              "samples": 4448,
+              "wrapped_step_abs": {
+                "max": 0.025174594404837602,
+                "mean": 0.002154824714227791,
+                "n": 17788,
+                "p95": 0.008221073156690998,
+                "rms": 0.00362594538059249,
+                "std": 0.0029161979277808176
+              }
+            },
+            "nlopt_iterations": {
+              "max": 19.0,
+              "mean": 9.890287769784173,
+              "n": 4448,
+              "p95": 12.0,
+              "rms": 10.082082190448759,
+              "std": 1.9571890879068494
+            },
+            "nlopt_lambda": {
+              "all": {
+                "max": 9.21529769897461,
+                "mean": 8.086847095636369,
+                "n": 17792,
+                "p95": 9.026948881149291,
+                "rms": 8.112561246618124,
+                "std": 0.6454099719773693
+              },
+              "max": 9.21529769897461
+            },
+            "nlopt_phi": {
+              "all_abs": {
+                "max": 0.05874807760119438,
+                "mean": 0.024143545602346404,
+                "n": 17792,
+                "p95": 0.04348983857780695,
+                "rms": 0.02802249264936896,
+                "std": 0.014224953428090971
+              },
+              "max_abs": 0.05874807760119438
+            },
+            "nlopt_result": {
+              "counts": {
+                "3": 4404,
+                "4": 44
+              },
+              "fallback_or_fail": 0,
+              "samples": 4448,
+              "success_rate": 1.0
+            },
+            "thrust": {
+              "imbalance_std": {
+                "max": 0.7104918436240829,
+                "mean": 0.6448297984889803,
+                "n": 4448,
+                "p95": 0.6779191086116703,
+                "rms": 0.6451684507398213,
+                "std": 0.020901215531211423
+              },
+              "max_single": 9.21529769897461,
+              "min_single": 6.959937572479248,
+              "samples": 4448,
+              "sum_square": {
+                "max": 266.7881462582393,
+                "mean": 263.25459992052083,
+                "n": 4448,
+                "p95": 265.0166358711448,
+                "rms": 263.25682346303563,
+                "std": 1.0819983985224713
+              },
+              "total": {
+                "max": 32.582520961761475,
+                "mean": 32.347388382545475,
+                "n": 4448,
+                "p95": 32.45978798866272,
+                "rms": 32.34746547111231,
+                "std": 0.07062034809401255
+              }
+            },
+            "tracking": {
+              "pos_abs": {
+                "max": 0.033084996019829775,
+                "mean": 0.005166753319363921,
+                "n": 4448,
+                "p95": 0.008564692420007642,
+                "rms": 0.006422380379015328,
+                "std": 0.0038146598628977357
+              },
+              "samples": 4448,
+              "xy_abs": {
+                "max": 0.03307772044204749,
+                "mean": 0.004972316775043699,
+                "n": 4448,
+                "p95": 0.008508784360867895,
+                "rms": 0.0062981543167842996,
+                "std": 0.003865593574943923
+              },
+              "yaw_abs": {
+                "max": 0.06457320600748062,
+                "mean": 0.006572098653343875,
+                "n": 4448,
+                "p95": 0.03199681229889391,
+                "rms": 0.011553774652573207,
+                "std": 0.009502485359797128
+              },
+              "z_abs": {
+                "max": 0.004745002835988998,
+                "mean": 0.0010032370169607877,
+                "n": 4448,
+                "p95": 0.002450863632839173,
+                "rms": 0.001257068786794245,
+                "std": 0.0007574545679656142
+              }
+            }
+          },
+          "hover": {
+            "flight_state_counts": {
+              "5": 1250
+            },
+            "gimbal": {
+              "abs_phi": {
+                "max": 0.06551540921424015,
+                "mean": 0.02727959026484133,
+                "n": 5000,
+                "p95": 0.04776070263162278,
+                "rms": 0.0293276607409917,
+                "std": 0.010767341339489532
+              },
+              "jump_gt_0p2": 0,
+              "jump_gt_0p5": 0,
+              "per_gimbal_abs_max": [
+                0.06551540921424015,
+                0.033545296272406835,
+                0.0627406072946818,
+                0.04104429889292721
+              ],
+              "samples": 1250,
+              "wrapped_step_abs": {
+                "max": 0.016325318704783154,
+                "mean": 0.0018820893723301446,
+                "n": 4996,
+                "p95": 0.007859471281572383,
+                "rms": 0.0033475696029519574,
+                "std": 0.002768386143797474
+              }
+            },
+            "nlopt_iterations": {
+              "max": 17.0,
+              "mean": 9.6656,
+              "n": 1250,
+              "p95": 12.0,
+              "rms": 9.843982933751967,
+              "std": 1.8655231545065314
+            },
+            "nlopt_lambda": {
+              "all": {
+                "max": 9.124448776245117,
+                "mean": 8.091592663383484,
+                "n": 5000,
+                "p95": 9.034374570846557,
+                "rms": 8.117259995551173,
+                "std": 0.6450100815134616
+              },
+              "max": 9.124448776245117
+            },
+            "nlopt_phi": {
+              "all_abs": {
+                "max": 0.06551540642976761,
+                "mean": 0.02727959026447352,
+                "n": 5000,
+                "p95": 0.047760701924562464,
+                "rms": 0.029327660740487583,
+                "std": 0.010767341339048293
+              },
+              "max_abs": 0.06551540642976761
+            },
+            "nlopt_result": {
+              "counts": {
+                "3": 1243,
+                "4": 7
+              },
+              "fallback_or_fail": 0,
+              "samples": 1250,
+              "success_rate": 1.0
+            },
+            "thrust": {
+              "imbalance_std": {
+                "max": 0.7169820345667111,
+                "mean": 0.6442274296221363,
+                "n": 1250,
+                "p95": 0.6797700497146759,
+                "rms": 0.6445720321427122,
+                "std": 0.021074238848434717
+              },
+              "max_single": 9.124448776245117,
+              "min_single": 7.000765323638916,
+              "samples": 1250,
+              "sum_square": {
+                "max": 268.43292767539447,
+                "mean": 263.5596393415017,
+                "n": 1250,
+                "p95": 266.443313687951,
+                "rms": 263.5639234249046,
+                "std": 1.5027445912527093
+              },
+              "total": {
+                "max": 32.67413568496704,
+                "mean": 32.366370653533934,
+                "n": 1250,
+                "p95": 32.54212052822113,
+                "rms": 32.36651027979503,
+                "std": 0.09507055345725776
+              }
+            },
+            "tracking": {
+              "pos_abs": {
+                "max": 0.07959973366992747,
+                "mean": 0.03824343107956239,
+                "n": 1250,
+                "p95": 0.07599878722941543,
+                "rms": 0.042569869253566976,
+                "std": 0.018698495862730466
+              },
+              "samples": 1250,
+              "xy_abs": {
+                "max": 0.07410829834012972,
+                "mean": 0.03606055456048339,
+                "n": 1250,
+                "p95": 0.07076244432386611,
+                "rms": 0.03986825839263833,
+                "std": 0.017003365315506738
+              },
+              "yaw_abs": {
+                "max": 0.00492546521127224,
+                "mean": 0.0014383142120606863,
+                "n": 1250,
+                "p95": 0.0033879933995194715,
+                "rms": 0.0017557084160972182,
+                "std": 0.0010068586145724984
+              },
+              "z_abs": {
+                "max": 0.030737869441509247,
+                "mean": 0.012451782315596939,
+                "n": 1250,
+                "p95": 0.027951812371611595,
+                "rms": 0.014923663792903216,
+                "std": 0.008226108324633085
+              }
+            }
+          },
+          "post_hover": {
+            "flight_state_counts": {
+              "5": 652
+            },
+            "gimbal": {
+              "abs_phi": {
+                "max": 0.06303144565069672,
+                "mean": 0.02082885546078143,
+                "n": 2608,
+                "p95": 0.04540342087946775,
+                "rms": 0.026004850176850332,
+                "std": 0.01556955403710422
+              },
+              "jump_gt_0p2": 0,
+              "jump_gt_0p5": 0,
+              "per_gimbal_abs_max": [
+                0.06303144565069672,
+                0.022931449220144597,
+                0.051178408959231106,
+                0.027272407346490665
+              ],
+              "samples": 652,
+              "wrapped_step_abs": {
+                "max": 0.018677487397571912,
+                "mean": 0.001961679088766026,
+                "n": 2604,
+                "p95": 0.008164965234676734,
+                "rms": 0.003526556814537953,
+                "std": 0.0029306003000856614
+              }
+            },
+            "nlopt_iterations": {
+              "max": 17.0,
+              "mean": 9.811349693251534,
+              "n": 652,
+              "p95": 12.0,
+              "rms": 10.012798558311516,
+              "std": 1.998387391387913
+            },
+            "nlopt_lambda": {
+              "all": {
+                "max": 9.20347785949707,
+                "mean": 8.086983592963657,
+                "n": 2608,
+                "p95": 9.118770790100097,
+                "rms": 8.112971328509518,
+                "std": 0.6488452391395978
+              },
+              "max": 9.20347785949707
+            },
+            "nlopt_phi": {
+              "all_abs": {
+                "max": 0.06303144246339798,
+                "mean": 0.020828855457756285,
+                "n": 2608,
+                "p95": 0.045403422228991984,
+                "rms": 0.02600485017984337,
+                "std": 0.01556955404615032
+              },
+              "max_abs": 0.06303144246339798
+            },
+            "nlopt_result": {
+              "counts": {
+                "3": 643,
+                "4": 9
+              },
+              "fallback_or_fail": 0,
+              "samples": 652,
+              "success_rate": 1.0
+            },
+            "thrust": {
+              "imbalance_std": {
+                "max": 0.715407464669978,
+                "mean": 0.648288599858184,
+                "n": 652,
+                "p95": 0.681807710823389,
+                "rms": 0.648608275487718,
+                "std": 0.02036139300408594
+              },
+              "max_single": 9.20347785949707,
+              "min_single": 6.999264717102051,
+              "samples": 652,
+              "sum_square": {
+                "max": 266.5260630106295,
+                "mean": 263.2812151088701,
+                "n": 652,
+                "p95": 265.12154055187483,
+                "rms": 263.2834595378974,
+                "std": 1.0871232867266498
+              },
+              "total": {
+                "max": 32.55253791809082,
+                "mean": 32.34793437185463,
+                "n": 652,
+                "p95": 32.46432158946991,
+                "rms": 32.348010407364804,
+                "std": 0.07013693155198022
+              }
+            },
+            "tracking": {
+              "pos_abs": {
+                "max": 0.0276022442374798,
+                "mean": 0.007480423394274993,
+                "n": 652,
+                "p95": 0.017350331611896905,
+                "rms": 0.009188371962331547,
+                "std": 0.005335676635680225
+              },
+              "samples": 652,
+              "xy_abs": {
+                "max": 0.02759696650996357,
+                "mean": 0.007303488525572748,
+                "n": 652,
+                "p95": 0.017326710503500264,
+                "rms": 0.009110519669904497,
+                "std": 0.005446156811233397
+              },
+              "yaw_abs": {
+                "max": 0.0677490159869194,
+                "mean": 0.032892888747109245,
+                "n": 652,
+                "p95": 0.06390187591314316,
+                "rms": 0.039695062070680825,
+                "std": 0.02222061706311275
+              },
+              "z_abs": {
+                "max": 0.003678773296996951,
+                "mean": 0.0009362715451686305,
+                "n": 652,
+                "p95": 0.002613555174320936,
+                "rms": 0.0011935705519338661,
+                "std": 0.0007402744465070093
+              }
+            }
+          }
+        },
+        "phases": {
+          "arm": 7.084,
+          "circle": 37.786,
+          "done": 69.579,
+          "hover": 29.535,
+          "land": 67.287,
+          "post_hover": 62.025,
+          "takeoff": 7.38
+        },
+        "topics": {
+          "flight_state": 13457,
+          "gimbal": 12388,
+          "nlopt_iter": 12386,
+          "nlopt_log": 12385,
+          "nlopt_result": 12386,
+          "pid": 12386,
+          "thrust": 12386
+        },
+        "windows": {
+          "circle": [
+            38.786,
+            61.025
+          ],
+          "hover": [
+            30.535,
+            36.786
+          ],
+          "post_hover": [
+            63.025,
+            66.287
+          ]
+        }
+      },
+      "bag": "/tmp/delta_opt_eval_20260810/phase2_small_weights/p2_delta_phi_1/attempt_1/bags/p2_delta_phi_1.bag",
+      "name": "p2_delta_phi_1",
+      "params": {
+        "nlopt_delta_lambda_weight": 0.0,
+        "nlopt_delta_phi_weight": 1.0,
+        "nlopt_lambda_balance_weight": 0.0,
+        "nlopt_lambda_weight": 1.0,
+        "nlopt_phi_limit": 1.0471975512,
+        "nlopt_phi_nominal": 0.0,
+        "nlopt_phi_nominal_weight": 0.0
+      },
+      "score": 15.956697473106354
+    },
+    {
+      "analysis": {
+        "bag": "/tmp/delta_opt_eval_20260810/phase2_small_weights/p2_delta_phi_3/attempt_2/bags/p2_delta_phi_3.bag",
+        "by_phase": {
+          "circle": {
+            "flight_state_counts": {
+              "5": 4449
+            },
+            "gimbal": {
+              "abs_phi": {
+                "max": 0.07927465313307933,
+                "mean": 0.036090811351832786,
+                "n": 17796,
+                "p95": 0.050587165483604826,
+                "rms": 0.03752277120745469,
+                "std": 0.010267019774667256
+              },
+              "jump_gt_0p2": 0,
+              "jump_gt_0p5": 0,
+              "per_gimbal_abs_max": [
+                0.06336889807778077,
+                0.06330856914726855,
+                0.05690500404123196,
+                0.07927465313307933
+              ],
+              "samples": 4449,
+              "wrapped_step_abs": {
+                "max": 0.024611606660629448,
+                "mean": 0.002187427322690713,
+                "n": 17792,
+                "p95": 0.008399524321692449,
+                "rms": 0.0036777418337938118,
+                "std": 0.0029565092091828854
+              }
+            },
+            "nlopt_iterations": {
+              "max": 17.0,
+              "mean": 10.152843335581029,
+              "n": 4449,
+              "p95": 12.0,
+              "rms": 10.284380744630031,
+              "std": 1.6395912611577452
+            },
+            "nlopt_lambda": {
+              "all": {
+                "max": 9.246113777160645,
+                "mean": 8.087901162522432,
+                "n": 17796,
+                "p95": 9.032830953598022,
+                "rms": 8.113662271535482,
+                "std": 0.6460419814583166
+              },
+              "max": 9.246113777160645
+            },
+            "nlopt_phi": {
+              "all_abs": {
+                "max": 0.07927465438842773,
+                "mean": 0.03609081134699355,
+                "n": 17796,
+                "p95": 0.050587164238095284,
+                "rms": 0.03752277120115155,
+                "std": 0.010267019768642199
+              },
+              "max_abs": 0.07927465438842773
+            },
+            "nlopt_result": {
+              "counts": {
+                "3": 4405,
+                "4": 44
+              },
+              "fallback_or_fail": 0,
+              "samples": 4449,
+              "success_rate": 1.0
+            },
+            "thrust": {
+              "imbalance_std": {
+                "max": 0.7284234004060337,
+                "mean": 0.6454457615810054,
+                "n": 4449,
+                "p95": 0.6797842965716462,
+                "rms": 0.6457961663614757,
+                "std": 0.021271044739147732
+              },
+              "max_single": 9.246113777160645,
+              "min_single": 6.953615665435791,
+              "samples": 4449,
+              "sum_square": {
+                "max": 267.47372771864184,
+                "mean": 263.3260618261532,
+                "n": 4449,
+                "p95": 265.09678008728326,
+                "rms": 263.32832529530504,
+                "std": 1.0918177315556303
+              },
+              "total": {
+                "max": 32.62092351913452,
+                "mean": 32.351604650089726,
+                "n": 4449,
+                "p95": 32.468644046783446,
+                "rms": 32.35168317551373,
+                "std": 0.07128010318837633
+              }
+            },
+            "tracking": {
+              "pos_abs": {
+                "max": 0.0300936801349515,
+                "mean": 0.005293537094288538,
+                "n": 4449,
+                "p95": 0.009586754571585272,
+                "rms": 0.006225947116077222,
+                "std": 0.003277328565094069
+              },
+              "samples": 4449,
+              "xy_abs": {
+                "max": 0.030086908319202837,
+                "mean": 0.005130175987247056,
+                "n": 4449,
+                "p95": 0.009392362810095412,
+                "rms": 0.006114023541445331,
+                "std": 0.0033260454304205487
+              },
+              "yaw_abs": {
+                "max": 0.06496331095695496,
+                "mean": 0.006636011549290549,
+                "n": 4449,
+                "p95": 0.032949697226285934,
+                "rms": 0.01165263745178338,
+                "std": 0.009578481628128077
+              },
+              "z_abs": {
+                "max": 0.004179505165666342,
+                "mean": 0.0009310357668391555,
+                "n": 4449,
+                "p95": 0.0023414529860019684,
+                "rms": 0.0011752164170239323,
+                "std": 0.0007171513283183646
+              }
+            }
+          },
+          "hover": {
+            "flight_state_counts": {
+              "5": 1250
+            },
+            "gimbal": {
+              "abs_phi": {
+                "max": 0.09945076658661417,
+                "mean": 0.05335760337796644,
+                "n": 5000,
+                "p95": 0.08209275859388236,
+                "rms": 0.05587409267846721,
+                "std": 0.016579517315096003
+              },
+              "jump_gt_0p2": 0,
+              "jump_gt_0p5": 0,
+              "per_gimbal_abs_max": [
+                0.06157019408014193,
+                0.07796660076508816,
+                0.0666640945693208,
+                0.09945076658661417
+              ],
+              "samples": 1250,
+              "wrapped_step_abs": {
+                "max": 0.018644660789433054,
+                "mean": 0.0019662461544346886,
+                "n": 4996,
+                "p95": 0.00832252954895929,
+                "rms": 0.0035369879255004602,
+                "std": 0.0029400951762327096
+              }
+            },
+            "nlopt_iterations": {
+              "max": 15.0,
+              "mean": 10.052,
+              "n": 1250,
+              "p95": 12.0,
+              "rms": 10.172394015176565,
+              "std": 1.5604153293274199
+            },
+            "nlopt_lambda": {
+              "all": {
+                "max": 9.122568130493164,
+                "mean": 8.0956074757576,
+                "n": 5000,
+                "p95": 9.03977084159851,
+                "rms": 8.121220138618684,
+                "std": 0.6444812940368111
+              },
+              "max": 9.122568130493164
+            },
+            "nlopt_phi": {
+              "all_abs": {
+                "max": 0.09945076704025269,
+                "mean": 0.05335760337077081,
+                "n": 5000,
+                "p95": 0.08209276162087917,
+                "rms": 0.055874092684964835,
+                "std": 0.01657951736015099
+              },
+              "max_abs": 0.09945076704025269
+            },
+            "nlopt_result": {
+              "counts": {
+                "3": 1234,
+                "4": 16
+              },
+              "fallback_or_fail": 0,
+              "samples": 1250,
+              "success_rate": 1.0
+            },
+            "thrust": {
+              "imbalance_std": {
+                "max": 0.7214989588516025,
+                "mean": 0.6435915333565566,
+                "n": 1250,
+                "p95": 0.680444988334156,
+                "rms": 0.6440086644571643,
+                "std": 0.023175376753282555
+              },
+              "max_single": 9.122568130493164,
+              "min_single": 6.97137451171875,
+              "samples": 1250,
+              "sum_square": {
+                "max": 268.88725037675,
+                "mean": 263.81686615962275,
+                "n": 1250,
+                "p95": 266.6174780266395,
+                "rms": 263.82145375096206,
+                "std": 1.5558242145938708
+              },
+              "total": {
+                "max": 32.69578313827515,
+                "mean": 32.3824299030304,
+                "n": 1250,
+                "p95": 32.561323571205136,
+                "rms": 32.38258034931985,
+                "std": 0.09870995633367412
+              }
+            },
+            "tracking": {
+              "pos_abs": {
+                "max": 0.057114323929985056,
+                "mean": 0.026899529352405967,
+                "n": 1250,
+                "p95": 0.054592055733345496,
+                "rms": 0.03024368311664396,
+                "std": 0.01382373643697769
+              },
+              "samples": 1250,
+              "xy_abs": {
+                "max": 0.04972491940111717,
+                "mean": 0.02358733159890886,
+                "n": 1250,
+                "p95": 0.04670811429551053,
+                "rms": 0.02619610379857338,
+                "std": 0.011396211750785713
+              },
+              "yaw_abs": {
+                "max": 0.028250381350517273,
+                "mean": 0.007066130013715156,
+                "n": 1250,
+                "p95": 0.02528019957244396,
+                "rms": 0.011060945567963023,
+                "std": 0.008509660597621664
+              },
+              "z_abs": {
+                "max": 0.030175205320119858,
+                "mean": 0.012694888527737931,
+                "n": 1250,
+                "p95": 0.02800774574279785,
+                "rms": 0.015114381040398051,
+                "std": 0.008202701963539326
+              }
+            }
+          },
+          "post_hover": {
+            "flight_state_counts": {
+              "5": 653
+            },
+            "gimbal": {
+              "abs_phi": {
+                "max": 0.06041804067653227,
+                "mean": 0.02263412992381544,
+                "n": 2612,
+                "p95": 0.04663665031149148,
+                "rms": 0.027112892012919818,
+                "std": 0.014926656554503212
+              },
+              "jump_gt_0p2": 0,
+              "jump_gt_0p5": 0,
+              "per_gimbal_abs_max": [
+                0.06041804067653227,
+                0.022416993182364252,
+                0.05199648088727603,
+                0.02651083719786193
+              ],
+              "samples": 653,
+              "wrapped_step_abs": {
+                "max": 0.01907492081332096,
+                "mean": 0.002039421137167872,
+                "n": 2608,
+                "p95": 0.008744886373463937,
+                "rms": 0.003628094634034276,
+                "std": 0.0030006386151586483
+              }
+            },
+            "nlopt_iterations": {
+              "max": 20.0,
+              "mean": 10.257274119448699,
+              "n": 653,
+              "p95": 13.0,
+              "rms": 10.398492057011168,
+              "std": 1.7079123801332081
+            },
+            "nlopt_lambda": {
+              "all": {
+                "max": 9.216368675231934,
+                "mean": 8.086390945849338,
+                "n": 2612,
+                "p95": 9.1272216796875,
+                "rms": 8.112473991410864,
+                "std": 0.6500121015823931
+              },
+              "max": 9.216368675231934
+            },
+            "nlopt_phi": {
+              "all_abs": {
+                "max": 0.06041803956031799,
+                "mean": 0.022634129899952286,
+                "n": 2612,
+                "p95": 0.046636650152504434,
+                "rms": 0.027112891977560515,
+                "std": 0.01492665652646135
+              },
+              "max_abs": 0.06041803956031799
+            },
+            "nlopt_result": {
+              "counts": {
+                "3": 647,
+                "4": 6
+              },
+              "fallback_or_fail": 0,
+              "samples": 653,
+              "success_rate": 1.0
+            },
+            "thrust": {
+              "imbalance_std": {
+                "max": 0.7062119521298202,
+                "mean": 0.6494292934057277,
+                "n": 653,
+                "p95": 0.684812405970527,
+                "rms": 0.6497748187140655,
+                "std": 0.021187446788931013
+              },
+              "max_single": 9.216368675231934,
+              "min_single": 6.948072910308838,
+              "samples": 653,
+              "sum_square": {
+                "max": 266.397613523598,
+                "mean": 263.24893704527085,
+                "n": 653,
+                "p95": 265.07424844634227,
+                "rms": 263.2511508265569,
+                "std": 1.0796092078248585
+              },
+              "total": {
+                "max": 32.53713512420654,
+                "mean": 32.34556378339735,
+                "n": 653,
+                "p95": 32.46118116378784,
+                "rms": 32.34564006385598,
+                "std": 0.07024723979347659
+              }
+            },
+            "tracking": {
+              "pos_abs": {
+                "max": 0.028439467938989778,
+                "mean": 0.007247930435056634,
+                "n": 653,
+                "p95": 0.018178568138627723,
+                "rms": 0.00916891949114627,
+                "std": 0.005615744745240985
+              },
+              "samples": 653,
+              "xy_abs": {
+                "max": 0.02839153777750248,
+                "mean": 0.007082436608740561,
+                "n": 653,
+                "p95": 0.018159060803272013,
+                "rms": 0.009094570853368235,
+                "std": 0.005705287958561472
+              },
+              "yaw_abs": {
+                "max": 0.06872759759426117,
+                "mean": 0.032072053178076085,
+                "n": 653,
+                "p95": 0.06312829107046128,
+                "rms": 0.0390033859042989,
+                "std": 0.022195664372627412
+              },
+              "z_abs": {
+                "max": 0.004746148828417063,
+                "mean": 0.0009200374048238239,
+                "n": 653,
+                "p95": 0.002301505533978343,
+                "rms": 0.0011652749152826285,
+                "std": 0.0007151201311052431
+              }
+            }
+          }
+        },
+        "phases": {
+          "arm": 7.222,
+          "circle": 38.358,
+          "done": 70.159,
+          "hover": 30.108,
+          "land": 67.869,
+          "post_hover": 62.605,
+          "takeoff": 7.521
+        },
+        "topics": {
+          "flight_state": 13533,
+          "gimbal": 12474,
+          "nlopt_iter": 12472,
+          "nlopt_log": 12471,
+          "nlopt_result": 12472,
+          "pid": 12472,
+          "thrust": 12472
+        },
+        "windows": {
+          "circle": [
+            39.358,
+            61.605
+          ],
+          "hover": [
+            31.108,
+            37.358
+          ],
+          "post_hover": [
+            63.605,
+            66.869
+          ]
+        }
+      },
+      "bag": "/tmp/delta_opt_eval_20260810/phase2_small_weights/p2_delta_phi_3/attempt_2/bags/p2_delta_phi_3.bag",
+      "name": "p2_delta_phi_3",
+      "params": {
+        "nlopt_delta_lambda_weight": 0.0,
+        "nlopt_delta_phi_weight": 3.0,
+        "nlopt_lambda_balance_weight": 0.0,
+        "nlopt_lambda_weight": 1.0,
+        "nlopt_phi_limit": 1.0471975512,
+        "nlopt_phi_nominal": 0.0,
+        "nlopt_phi_nominal_weight": 0.0
+      },
+      "score": 16.539474276845116
+    },
+    {
+      "analysis": {
+        "bag": "/tmp/delta_opt_eval_20260810/phase2_small_weights/p2_phi_nominal_1/attempt_2/bags/p2_phi_nominal_1.bag",
+        "by_phase": {
+          "circle": {
+            "flight_state_counts": {
+              "5": 4448
+            },
+            "gimbal": {
+              "abs_phi": {
+                "max": 0.05629923597363861,
+                "mean": 0.020200901008322305,
+                "n": 17792,
+                "p95": 0.04261211819421872,
+                "rms": 0.026321170140008406,
+                "std": 0.016873873176933417
+              },
+              "jump_gt_0p2": 0,
+              "jump_gt_0p5": 0,
+              "per_gimbal_abs_max": [
+                0.05629923597363861,
+                0.017839489773844964,
+                0.04970235991986146,
+                0.020251861103419123
+              ],
+              "samples": 4448,
+              "wrapped_step_abs": {
+                "max": 0.022374644251596187,
+                "mean": 0.0021814425453294687,
+                "n": 17788,
+                "p95": 0.008245694834120314,
+                "rms": 0.0036729958500376597,
+                "std": 0.0029550307842424175
+              }
+            },
+            "nlopt_iterations": {
+              "max": 19.0,
+              "mean": 8.415017985611511,
+              "n": 4448,
+              "p95": 13.0,
+              "rms": 9.18411789900009,
+              "std": 3.6790615494401018
+            },
+            "nlopt_lambda": {
+              "all": {
+                "max": 9.251760482788086,
+                "mean": 8.086809793420189,
+                "n": 17792,
+                "p95": 9.027112674713134,
+                "rms": 8.112477685849438,
+                "std": 0.6448267739853631
+              },
+              "max": 9.251760482788086
+            },
+            "nlopt_phi": {
+              "all_abs": {
+                "max": 0.05629923567175865,
+                "mean": 0.020200901009013863,
+                "n": 17792,
+                "p95": 0.04261211808770895,
+                "rms": 0.02632117014107878,
+                "std": 0.01687387317777515
+              },
+              "max_abs": 0.05629923567175865
+            },
+            "nlopt_result": {
+              "counts": {
+                "3": 4404,
+                "4": 44
+              },
+              "fallback_or_fail": 0,
+              "samples": 4448,
+              "success_rate": 1.0
+            },
+            "thrust": {
+              "imbalance_std": {
+                "max": 0.7155403883882889,
+                "mean": 0.6442190000940733,
+                "n": 4448,
+                "p95": 0.6808059436879996,
+                "rms": 0.6445692519101411,
+                "std": 0.02124618614695968
+              },
+              "max_single": 9.251760482788086,
+              "min_single": 6.949034690856934,
+              "samples": 4448,
+              "sum_square": {
+                "max": 267.9913855163213,
+                "mean": 263.24917681362024,
+                "n": 4448,
+                "p95": 265.0760771477046,
+                "rms": 263.2515225018471,
+                "std": 1.1113084593561202
+              },
+              "total": {
+                "max": 32.661848068237305,
+                "mean": 32.347239173680755,
+                "n": 4448,
+                "p95": 32.467832589149474,
+                "rms": 32.34732129444961,
+                "std": 0.07288873058263345
+              }
+            },
+            "tracking": {
+              "pos_abs": {
+                "max": 0.03029992519947017,
+                "mean": 0.004946784202008564,
+                "n": 4448,
+                "p95": 0.008987217978657858,
+                "rms": 0.0056606346640422295,
+                "std": 0.0027517468739902268
+              },
+              "samples": 4448,
+              "xy_abs": {
+                "max": 0.030298992611271166,
+                "mean": 0.004761899223173023,
+                "n": 4448,
+                "p95": 0.008646447683816215,
+                "rms": 0.005503135599689168,
+                "std": 0.002758408457228629
+              },
+              "yaw_abs": {
+                "max": 0.06698788702487946,
+                "mean": 0.006525152294498746,
+                "n": 4448,
+                "p95": 0.03207571431994438,
+                "rms": 0.011538579299896278,
+                "std": 0.009516364841345284
+              },
+              "z_abs": {
+                "max": 0.00489282188937068,
+                "mean": 0.0010342482330752975,
+                "n": 4448,
+                "p95": 0.0026220111176371574,
+                "rms": 0.0013260027794805805,
+                "std": 0.0008298276710081743
+              }
+            }
+          },
+          "hover": {
+            "flight_state_counts": {
+              "5": 1249
+            },
+            "gimbal": {
+              "abs_phi": {
+                "max": 0.044336276200281396,
+                "mean": 0.01789387558275088,
+                "n": 4996,
+                "p95": 0.03736766816649991,
+                "rms": 0.022797819480703772,
+                "std": 0.01412620931827744
+              },
+              "jump_gt_0p2": 0,
+              "jump_gt_0p5": 0,
+              "per_gimbal_abs_max": [
+                0.044336276200281396,
+                0.014416363242270636,
+                0.04166627539524365,
+                0.019241129867749944
+              ],
+              "samples": 1249,
+              "wrapped_step_abs": {
+                "max": 0.018673425239907004,
+                "mean": 0.001920087777717701,
+                "n": 4992,
+                "p95": 0.00798194492655899,
+                "rms": 0.0034099383737034345,
+                "std": 0.0028179678206669296
+              }
+            },
+            "nlopt_iterations": {
+              "max": 17.0,
+              "mean": 8.233787029623699,
+              "n": 1249,
+              "p95": 12.0,
+              "rms": 8.886707987949782,
+              "std": 3.3434009651687036
+            },
+            "nlopt_lambda": {
+              "all": {
+                "max": 9.110688209533691,
+                "mean": 8.090720837358669,
+                "n": 4996,
+                "p95": 9.02847933769226,
+                "rms": 8.116246086990362,
+                "std": 0.6431849473647535
+              },
+              "max": 9.110688209533691
+            },
+            "nlopt_phi": {
+              "all_abs": {
+                "max": 0.04433627799153328,
+                "mean": 0.01789387558746122,
+                "n": 4996,
+                "p95": 0.037367669865489006,
+                "rms": 0.022797819486623856,
+                "std": 0.01412620932186501
+              },
+              "max_abs": 0.04433627799153328
+            },
+            "nlopt_result": {
+              "counts": {
+                "3": 1231,
+                "4": 18
+              },
+              "fallback_or_fail": 0,
+              "samples": 1249,
+              "success_rate": 1.0
+            },
+            "thrust": {
+              "imbalance_std": {
+                "max": 0.7058074250772018,
+                "mean": 0.6424639627441883,
+                "n": 1249,
+                "p95": 0.6748355634121883,
+                "rms": 0.6427997135876665,
+                "std": 0.020773260779674067
+              },
+              "max_single": 9.110688209533691,
+              "min_single": 7.021951675415039,
+              "samples": 1249,
+              "sum_square": {
+                "max": 271.4826337668528,
+                "mean": 263.4938021783454,
+                "n": 1249,
+                "p95": 266.02236631958823,
+                "rms": 263.49753631080847,
+                "std": 1.402802717701421
+              },
+              "total": {
+                "max": 32.880022048950195,
+                "mean": 32.362883349434675,
+                "n": 1249,
+                "p95": 32.51590013504028,
+                "rms": 32.36300581164808,
+                "std": 0.08903075677221588
+              }
+            },
+            "tracking": {
+              "pos_abs": {
+                "max": 0.036450671820115015,
+                "mean": 0.016021119948813365,
+                "n": 1249,
+                "p95": 0.03352145014497345,
+                "rms": 0.01848332788492854,
+                "std": 0.009217218956253095
+              },
+              "samples": 1249,
+              "xy_abs": {
+                "max": 0.022533751196417432,
+                "mean": 0.00992462631471307,
+                "n": 1249,
+                "p95": 0.019718429975003452,
+                "rms": 0.011059682672961318,
+                "std": 0.004880407087518994
+              },
+              "yaw_abs": {
+                "max": 0.00793730653822422,
+                "mean": 0.002268617017099147,
+                "n": 1249,
+                "p95": 0.005759338289499278,
+                "rms": 0.0028752945172651916,
+                "std": 0.0017665490060407155
+              },
+              "z_abs": {
+                "max": 0.029581088572740555,
+                "mean": 0.01239000135578597,
+                "n": 1249,
+                "p95": 0.027419380843639374,
+                "rms": 0.01480934937379682,
+                "std": 0.008112009324378153
+              }
+            }
+          },
+          "post_hover": {
+            "flight_state_counts": {
+              "5": 652
+            },
+            "gimbal": {
+              "abs_phi": {
+                "max": 0.056889416975123105,
+                "mean": 0.02150552178005825,
+                "n": 2608,
+                "p95": 0.043894326060003735,
+                "rms": 0.026245923979345873,
+                "std": 0.01504530021292506
+              },
+              "jump_gt_0p2": 0,
+              "jump_gt_0p5": 0,
+              "per_gimbal_abs_max": [
+                0.056889416975123105,
+                0.01980302441129964,
+                0.04619822840297867,
+                0.024598319945258226
+              ],
+              "samples": 652,
+              "wrapped_step_abs": {
+                "max": 0.017252501847344615,
+                "mean": 0.0019160012399997708,
+                "n": 2604,
+                "p95": 0.008139723669143305,
+                "rms": 0.003441383209681094,
+                "std": 0.002858681102220793
+              }
+            },
+            "nlopt_iterations": {
+              "max": 18.0,
+              "mean": 8.035276073619633,
+              "n": 652,
+              "p95": 12.0,
+              "rms": 8.848503391531173,
+              "std": 3.705448783974017
+            },
+            "nlopt_lambda": {
+              "all": {
+                "max": 9.218238830566406,
+                "mean": 8.086552336172092,
+                "n": 2608,
+                "p95": 9.122097492218018,
+                "rms": 8.112565922643755,
+                "std": 0.6491511099816312
+              },
+              "max": 9.218238830566406
+            },
+            "nlopt_phi": {
+              "all_abs": {
+                "max": 0.05688941851258278,
+                "mean": 0.021505521776897657,
+                "n": 2608,
+                "p95": 0.043894325755536555,
+                "rms": 0.02624592397362995,
+                "std": 0.015045300207471567
+              },
+              "max_abs": 0.05688941851258278
+            },
+            "nlopt_result": {
+              "counts": {
+                "3": 645,
+                "4": 7
+              },
+              "fallback_or_fail": 0,
+              "samples": 652,
+              "success_rate": 1.0
+            },
+            "thrust": {
+              "imbalance_std": {
+                "max": 0.7183347550170323,
+                "mean": 0.6484708863159375,
+                "n": 652,
+                "p95": 0.6823340751595101,
+                "rms": 0.648836118897579,
+                "std": 0.021767378957874214
+              },
+              "max_single": 9.218238830566406,
+              "min_single": 6.9123406410217285,
+              "samples": 652,
+              "sum_square": {
+                "max": 267.1706756853864,
+                "mean": 263.25490339696285,
+                "n": 652,
+                "p95": 265.3466963652759,
+                "rms": 263.2578486812336,
+                "std": 1.2452829907545826
+              },
+              "total": {
+                "max": 32.596022605895996,
+                "mean": 32.34620934468837,
+                "n": 652,
+                "p95": 32.48041210174561,
+                "rms": 32.34631046411436,
+                "std": 0.08088059389599847
+              }
+            },
+            "tracking": {
+              "pos_abs": {
+                "max": 0.025707955363663274,
+                "mean": 0.007027931064810298,
+                "n": 652,
+                "p95": 0.0159586557045825,
+                "rms": 0.008809635109543834,
+                "std": 0.00531204816540492
+              },
+              "samples": 652,
+              "xy_abs": {
+                "max": 0.025680217138616516,
+                "mean": 0.006860482558072435,
+                "n": 652,
+                "p95": 0.01592890501425239,
+                "rms": 0.008741267014158019,
+                "std": 0.005416966686549859
+              },
+              "yaw_abs": {
+                "max": 0.06722942739725113,
+                "mean": 0.0323502629675137,
+                "n": 652,
+                "p95": 0.06260543502867222,
+                "rms": 0.039163031247730365,
+                "std": 0.022072686797112325
+              },
+              "z_abs": {
+                "max": 0.0033050638157874346,
+                "mean": 0.000852844451979436,
+                "n": 652,
+                "p95": 0.0022246806765906513,
+                "rms": 0.0010954093985813414,
+                "std": 0.0006874431549068126
+              }
+            }
+          }
+        },
+        "phases": {
+          "arm": 6.879,
+          "circle": 37.288,
+          "done": 69.079,
+          "hover": 29.043,
+          "land": 66.789,
+          "post_hover": 61.529,
+          "takeoff": 7.183
+        },
+        "topics": {
+          "flight_state": 13388,
+          "gimbal": 12329,
+          "nlopt_iter": 12327,
+          "nlopt_log": 12326,
+          "nlopt_result": 12327,
+          "pid": 12327,
+          "thrust": 12327
+        },
+        "windows": {
+          "circle": [
+            38.288,
+            60.529
+          ],
+          "hover": [
+            30.043,
+            36.288
+          ],
+          "post_hover": [
+            62.529,
+            65.789
+          ]
+        }
+      },
+      "bag": "/tmp/delta_opt_eval_20260810/phase2_small_weights/p2_phi_nominal_1/attempt_2/bags/p2_phi_nominal_1.bag",
+      "name": "p2_phi_nominal_1",
+      "params": {
+        "nlopt_delta_lambda_weight": 0.0,
+        "nlopt_delta_phi_weight": 0.0,
+        "nlopt_lambda_balance_weight": 0.0,
+        "nlopt_lambda_weight": 1.0,
+        "nlopt_phi_limit": 1.0471975512,
+        "nlopt_phi_nominal": 0.0,
+        "nlopt_phi_nominal_weight": 1.0
+      },
+      "score": 14.587868751400391
+    },
+    {
+      "analysis": {
+        "bag": "/tmp/delta_opt_eval_20260810/phase2_small_weights/p2_combo_phi1_nom1/attempt_1/bags/p2_combo_phi1_nom1.bag",
+        "by_phase": {
+          "circle": {
+            "flight_state_counts": {
+              "5": 4445
+            },
+            "gimbal": {
+              "abs_phi": {
+                "max": 0.051300948886492774,
+                "mean": 0.021137760226754943,
+                "n": 17780,
+                "p95": 0.036851898249462285,
+                "rms": 0.023757863091523557,
+                "std": 0.010845789564240777
+              },
+              "jump_gt_0p2": 0,
+              "jump_gt_0p5": 0,
+              "per_gimbal_abs_max": [
+                0.051300948886492774,
+                0.03259532290121455,
+                0.04471605813509668,
+                0.03852052912549476
+              ],
+              "samples": 4445,
+              "wrapped_step_abs": {
+                "max": 0.02192444386282011,
+                "mean": 0.002121547249755761,
+                "n": 17776,
+                "p95": 0.008077273384470063,
+                "rms": 0.0035515613857269646,
+                "std": 0.002848267112410738
+              }
+            },
+            "nlopt_iterations": {
+              "max": 19.0,
+              "mean": 9.891563554555681,
+              "n": 4445,
+              "p95": 12.0,
+              "rms": 10.098457933933258,
+              "std": 2.0336723161820744
+            },
+            "nlopt_lambda": {
+              "all": {
+                "max": 9.260110855102539,
+                "mean": 8.085679358492015,
+                "n": 17780,
+                "p95": 9.027277040481568,
+                "rms": 8.111192111872214,
+                "std": 0.6428271831170336
+              },
+              "max": 9.260110855102539
+            },
+            "nlopt_phi": {
+              "all_abs": {
+                "max": 0.05130095034837723,
+                "mean": 0.021137760219721993,
+                "n": 17780,
+                "p95": 0.03685189858078956,
+                "rms": 0.023757863079863197,
+                "std": 0.010845789552405357
+              },
+              "max_abs": 0.05130095034837723
+            },
+            "nlopt_result": {
+              "counts": {
+                "3": 4402,
+                "4": 43
+              },
+              "fallback_or_fail": 0,
+              "samples": 4445,
+              "success_rate": 1.0
+            },
+            "thrust": {
+              "imbalance_std": {
+                "max": 0.7175934875188624,
+                "mean": 0.6422601974551275,
+                "n": 4445,
+                "p95": 0.6768552475879712,
+                "rms": 0.6425906073907469,
+                "std": 0.020604064446359035
+              },
+              "max_single": 9.260110855102539,
+              "min_single": 6.9581732749938965,
+              "samples": 4445,
+              "sum_square": {
+                "max": 267.3695094255827,
+                "mean": 263.16574990279213,
+                "n": 4445,
+                "p95": 264.9030711709569,
+                "rms": 263.1679159160685,
+                "std": 1.067729229712601
+              },
+              "total": {
+                "max": 32.61494541168213,
+                "mean": 32.34271743396806,
+                "n": 4445,
+                "p95": 32.456485176086424,
+                "rms": 32.34279265295221,
+                "std": 0.06975369780836153
+              }
+            },
+            "tracking": {
+              "pos_abs": {
+                "max": 0.03292400533543994,
+                "mean": 0.005482474564615408,
+                "n": 4445,
+                "p95": 0.009349087508089736,
+                "rms": 0.00662655055231592,
+                "std": 0.003722048477753014
+              },
+              "samples": 4445,
+              "xy_abs": {
+                "max": 0.032906209854546016,
+                "mean": 0.005321266217227807,
+                "n": 4445,
+                "p95": 0.009264707773561531,
+                "rms": 0.006524684751612053,
+                "std": 0.003775663776517834
+              },
+              "yaw_abs": {
+                "max": 0.06630109995603561,
+                "mean": 0.006699511159545678,
+                "n": 4445,
+                "p95": 0.034397486597299576,
+                "rms": 0.01192021845184669,
+                "std": 0.009859419768062887
+              },
+              "z_abs": {
+                "max": 0.004625813104212284,
+                "mean": 0.0009226050427472108,
+                "n": 4445,
+                "p95": 0.002247641095891595,
+                "rms": 0.0011574373047727408,
+                "std": 0.0006988998852317861
+              }
+            }
+          },
+          "hover": {
+            "flight_state_counts": {
+              "5": 1249
+            },
+            "gimbal": {
+              "abs_phi": {
+                "max": 0.04731298598773853,
+                "mean": 0.02148553605274906,
+                "n": 5000,
+                "p95": 0.0362688500933586,
+                "rms": 0.022786328480028536,
+                "std": 0.007588709121173357
+              },
+              "jump_gt_0p2": 0,
+              "jump_gt_0p5": 0,
+              "per_gimbal_abs_max": [
+                0.04731298598773853,
+                0.03659368086671419,
+                0.0467731902273077,
+                0.04481109955066133
+              ],
+              "samples": 1250,
+              "wrapped_step_abs": {
+                "max": 0.023796443163889514,
+                "mean": 0.001832624777522629,
+                "n": 4996,
+                "p95": 0.0077775888650419844,
+                "rms": 0.0033156298644032964,
+                "std": 0.002763130077020109
+              }
+            },
+            "nlopt_iterations": {
+              "max": 17.0,
+              "mean": 9.6504,
+              "n": 1250,
+              "p95": 12.0,
+              "rms": 9.829465906141595,
+              "std": 1.8676669510381128
+            },
+            "nlopt_lambda": {
+              "all": {
+                "max": 9.130826950073242,
+                "mean": 8.0894588057518,
+                "n": 5000,
+                "p95": 9.03733296394348,
+                "rms": 8.11475358612836,
+                "std": 0.6402202696164211
+              },
+              "max": 9.130826950073242
+            },
+            "nlopt_phi": {
+              "all_abs": {
+                "max": 0.047312986105680466,
+                "mean": 0.02148553605172783,
+                "n": 5000,
+                "p95": 0.036268849857151515,
+                "rms": 0.022786328478503252,
+                "std": 0.007588709119484811
+              },
+              "max_abs": 0.047312986105680466
+            },
+            "nlopt_result": {
+              "counts": {
+                "3": 1236,
+                "4": 14
+              },
+              "fallback_or_fail": 0,
+              "samples": 1250,
+              "success_rate": 1.0
+            },
+            "thrust": {
+              "imbalance_std": {
+                "max": 0.7116711588861616,
+                "mean": 0.6394144594660759,
+                "n": 1250,
+                "p95": 0.6768119158052959,
+                "rms": 0.6397970611035465,
+                "std": 0.022123029232933335
+              },
+              "max_single": 9.130826950073242,
+              "min_single": 7.021686553955078,
+              "samples": 1250,
+              "sum_square": {
+                "max": 268.7118318435205,
+                "mean": 263.39690305433226,
+                "n": 1250,
+                "p95": 266.03355696435966,
+                "rms": 263.40097482840065,
+                "std": 1.4645825133622423
+              },
+              "total": {
+                "max": 32.68991470336914,
+                "mean": 32.3578352230072,
+                "n": 1250,
+                "p95": 32.521921491622926,
+                "rms": 32.35796915362553,
+                "std": 0.09309902091753412
+              }
+            },
+            "tracking": {
+              "pos_abs": {
+                "max": 0.07707887133197408,
+                "mean": 0.03757703217069364,
+                "n": 1249,
+                "p95": 0.07461018898019998,
+                "rms": 0.04189471606502835,
+                "std": 0.018523873445151766
+              },
+              "samples": 1249,
+              "xy_abs": {
+                "max": 0.07148069975597116,
+                "mean": 0.03529785862418947,
+                "n": 1249,
+                "p95": 0.06947303619136598,
+                "rms": 0.03909747461441508,
+                "std": 0.016812902717007687
+              },
+              "yaw_abs": {
+                "max": 0.006004218943417072,
+                "mean": 0.0016096410494875586,
+                "n": 1249,
+                "p95": 0.0035756566096097216,
+                "rms": 0.001949298573964314,
+                "std": 0.001099463788518703
+              },
+              "z_abs": {
+                "max": 0.029607662931084633,
+                "mean": 0.012533732574014403,
+                "n": 1249,
+                "p95": 0.027281243354082108,
+                "rms": 0.01505173454936383,
+                "std": 0.008334282255095698
+              }
+            }
+          },
+          "post_hover": {
+            "flight_state_counts": {
+              "5": 653
+            },
+            "gimbal": {
+              "abs_phi": {
+                "max": 0.05513089331365751,
+                "mean": 0.019336223945982174,
+                "n": 2612,
+                "p95": 0.04185662222833152,
+                "rms": 0.024216603945412522,
+                "std": 0.014579243813030726
+              },
+              "jump_gt_0p2": 0,
+              "jump_gt_0p5": 0,
+              "per_gimbal_abs_max": [
+                0.05513089331365751,
+                0.018600046130303496,
+                0.048049964613127896,
+                0.023726915692279017
+              ],
+              "samples": 653,
+              "wrapped_step_abs": {
+                "max": 0.022904785800601957,
+                "mean": 0.0018169066099370966,
+                "n": 2608,
+                "p95": 0.007877135628583899,
+                "rms": 0.0033244239869995953,
+                "std": 0.0027839980632366063
+              }
+            },
+            "nlopt_iterations": {
+              "max": 19.0,
+              "mean": 9.745788667687595,
+              "n": 653,
+              "p95": 12.0,
+              "rms": 9.955951993249245,
+              "std": 2.034842337051117
+            },
+            "nlopt_lambda": {
+              "all": {
+                "max": 9.266124725341797,
+                "mean": 8.086127907722322,
+                "n": 2612,
+                "p95": 9.12015118598938,
+                "rms": 8.112117476309066,
+                "std": 0.6488338842825718
+              },
+              "max": 9.266124725341797
+            },
+            "nlopt_phi": {
+              "all_abs": {
+                "max": 0.055130891501903534,
+                "mean": 0.019336223921866184,
+                "n": 2612,
+                "p95": 0.041856623254716355,
+                "rms": 0.0242166039127049,
+                "std": 0.014579243790686959
+              },
+              "max_abs": 0.055130891501903534
+            },
+            "nlopt_result": {
+              "counts": {
+                "3": 648,
+                "4": 5
+              },
+              "fallback_or_fail": 0,
+              "samples": 653,
+              "success_rate": 1.0
+            },
+            "thrust": {
+              "imbalance_std": {
+                "max": 0.7246812931825993,
+                "mean": 0.648189665466086,
+                "n": 653,
+                "p95": 0.6846405133260409,
+                "rms": 0.6485878557569018,
+                "std": 0.022723648877306234
+              },
+              "max_single": 9.266124725341797,
+              "min_single": 6.9526262283325195,
+              "samples": 653,
+              "sum_square": {
+                "max": 267.14279917101635,
+                "mean": 263.2257997977559,
+                "n": 653,
+                "p95": 264.82932490597165,
+                "rms": 263.22805564988306,
+                "std": 1.089771558475467
+              },
+              "total": {
+                "max": 32.60828161239624,
+                "mean": 32.344511630889286,
+                "n": 653,
+                "p95": 32.45101375579834,
+                "rms": 32.34459058149999,
+                "std": 0.07146498531439359
+              }
+            },
+            "tracking": {
+              "pos_abs": {
+                "max": 0.027714245576020292,
+                "mean": 0.007219544721893899,
+                "n": 653,
+                "p95": 0.017222539345448037,
+                "rms": 0.009092233166622053,
+                "std": 0.005526923010572521
+              },
+              "samples": 653,
+              "xy_abs": {
+                "max": 0.027712370346289424,
+                "mean": 0.007034763780638947,
+                "n": 653,
+                "p95": 0.017154674276463812,
+                "rms": 0.009019818431406522,
+                "std": 0.005645283260045615
+              },
+              "yaw_abs": {
+                "max": 0.06985240429639816,
+                "mean": 0.03274820339427419,
+                "n": 653,
+                "p95": 0.06444180160760879,
+                "rms": 0.03993203179970998,
+                "std": 0.02284999645733665
+              },
+              "z_abs": {
+                "max": 0.00337983132340014,
+                "mean": 0.0009302846703623861,
+                "n": 653,
+                "p95": 0.0022071192506700754,
+                "rms": 0.001145242079510394,
+                "std": 0.0006679444982706558
+              }
+            }
+          }
+        },
+        "phases": {
+          "arm": 7.09,
+          "circle": 37.904,
+          "done": 69.683,
+          "hover": 29.658,
+          "land": 67.395,
+          "post_hover": 62.132,
+          "takeoff": 7.392
+        },
+        "topics": {
+          "flight_state": 13464,
+          "gimbal": 12406,
+          "nlopt_iter": 12404,
+          "nlopt_log": 12403,
+          "nlopt_result": 12404,
+          "pid": 12404,
+          "thrust": 12404
+        },
+        "windows": {
+          "circle": [
+            38.904,
+            61.132
+          ],
+          "hover": [
+            30.658,
+            36.904
+          ],
+          "post_hover": [
+            63.132,
+            66.395
+          ]
+        }
+      },
+      "bag": "/tmp/delta_opt_eval_20260810/phase2_small_weights/p2_combo_phi1_nom1/attempt_1/bags/p2_combo_phi1_nom1.bag",
+      "name": "p2_combo_phi1_nom1",
+      "params": {
+        "nlopt_delta_lambda_weight": 0.0,
+        "nlopt_delta_phi_weight": 1.0,
+        "nlopt_lambda_balance_weight": 0.0,
+        "nlopt_lambda_weight": 1.0,
+        "nlopt_phi_limit": 1.0471975512,
+        "nlopt_phi_nominal": 0.0,
+        "nlopt_phi_nominal_weight": 1.0
+      },
+      "score": 15.765674309819113
+    }
+  ]
+}
