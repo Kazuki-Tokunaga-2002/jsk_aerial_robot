@@ -40,7 +40,7 @@
     <!-- link joint -->
     <xacro:unless value="${self == child}">
       <joint name="joint${self}" type="revolute" >
-        <limit effort="6.8" lower="${-pi}" upper="${pi * 2 / 3}" velocity="0.1755"/>
+        <limit effort="6.8" lower="0.0" upper="1.4" velocity="0.1755"/>
         <parent link="link${self}" />
         <child  link="link${child}" />
         <axis xyz="0 0 1"/>

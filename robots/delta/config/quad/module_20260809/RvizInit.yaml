@@ -3,6 +3,6 @@ zeros:
   gimbal2: 0
   gimbal3: 0
   gimbal4: 0
-  joint1: 1.57
-  joint2: 1.57
-  joint3: 1.57
+  joint1: 1.4
+  joint2: 1.4
+  joint3: 1.4
