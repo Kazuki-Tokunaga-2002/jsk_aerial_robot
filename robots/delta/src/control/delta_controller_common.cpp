@@ -294,15 +294,6 @@ std::vector<float> DeltaController::calcCeilingThrustScale()
   ceiling_effect_scale_msg.data.resize(motor_num_, 1.0);
 
   std::fill(ceiling_thrust_scale_.begin(), ceiling_thrust_scale_.end(), 1.0f);
-  if (ceiling_tilt_mode_ == 0)
-  {
-    ceiling_effect_distance_pub_.publish(ceiling_effect_distance_msg);
-    ceiling_effect_dbar_pub_.publish(ceiling_effect_dbar_msg);
-    ceiling_effect_theta_pub_.publish(ceiling_effect_theta_msg);
-    ceiling_effect_ratio_pub_.publish(ceiling_effect_ratio_msg);
-    ceiling_effect_scale_pub_.publish(ceiling_effect_scale_msg);
-    return ceiling_thrust_scale_;
-  }
 
   tf::Quaternion cog2baselink_rot;
   tf::quaternionKDLToTF(robot_model_->getCogDesireOrientation<KDL::Rotation>(), cog2baselink_rot);
@@ -324,24 +315,26 @@ std::vector<float> DeltaController::calcCeilingThrustScale()
     double dbar = distance / ceiling_rotor_radius_;
     double theta = 0.0;
 
-    if (ceiling_tilt_mode_ == 2)
+    const Eigen::Vector3d& normal_cog_eigen = rotor_normal.at(i);
+    tf::Vector3 normal_cog(normal_cog_eigen.x(), normal_cog_eigen.y(), normal_cog_eigen.z());
+    tf::Vector3 normal_world = world_rot_from_cog * normal_cog;
+    if (normal_world.length2() > 1.0e-12)
     {
-      const Eigen::Vector3d& normal_cog_eigen = rotor_normal.at(i);
-      tf::Vector3 normal_cog(normal_cog_eigen.x(), normal_cog_eigen.y(), normal_cog_eigen.z());
-      tf::Vector3 normal_world = world_rot_from_cog * normal_cog;
-      if (normal_world.length2() > 1.0e-12)
-      {
-        normal_world.normalize();
-        double dot = std::abs(normal_world.dot(ceiling_normal));
-        theta = std::acos(clampDouble(dot, 0.0, 1.0));
-      }
+      normal_world.normalize();
+      double dot = std::abs(normal_world.dot(ceiling_normal));
+      theta = std::acos(clampDouble(dot, 0.0, 1.0));
     }
 
-    double k = calcCeilingThrustRatio(dbar, theta);
-    if (!std::isfinite(k) || k <= 1.0e-6)
+    double k = 1.0;
+    if (ceiling_tilt_mode_ != 0)
     {
-      ROS_WARN_THROTTLE(1.0, "[DeltaController] invalid ceiling effect ratio, use scale 1.0");
-      k = 1.0;
+      double model_theta = ceiling_tilt_mode_ == 1 ? 0.0 : theta;
+      k = calcCeilingThrustRatio(dbar, model_theta);
+      if (!std::isfinite(k) || k <= 1.0e-6)
+      {
+        ROS_WARN_THROTTLE(1.0, "[DeltaController] invalid ceiling effect ratio, use scale 1.0");
+        k = 1.0;
+      }
     }
 
     ceiling_thrust_scale_.at(i) = 1.0f / static_cast<float>(k);
