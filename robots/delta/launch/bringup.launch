@@ -20,7 +20,7 @@
   Module Delta  : type:=quad version:=module_20260809-->
   <arg name="type" default="quad"/>
   <arg name="version" default="module_20260809"/> 
-  <arg name="prop" default="9"/>
+  <arg name="prop" default="15"/>
   <arg name="ceiling_tilt" default="0"/>
   <arg name="config_dir" default="$(find delta)/config"/>
   <arg name="robot_id" default="" />

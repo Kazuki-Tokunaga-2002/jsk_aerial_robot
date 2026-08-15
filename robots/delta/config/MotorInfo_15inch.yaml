@@ -1,0 +1,48 @@
+motor_info:
+        min_pwm: 0.55 # 1100 [ms]
+        max_pwm: 0.95 # 1900 [ms]
+        min_thrust: 0.0 #  [N]
+        force_landing_thrust: 6.5 #[N]
+        m_f_rate: -0.0185
+        pwm_conversion_mode: 1 # Polynominal Mode
+        vel_ref_num: 5
+        ref1:
+                voltage: 25.2
+                max_thrust: 31.0285 # N
+                polynominal4: -0.72054064    # x 10^4
+                polynominal3: 5.57370323    # x 10^3
+                polynominal2: -15.28802017    # x 10^2
+                polynominal1: 27.69561171     # x 10
+                polynominal0: 56.20784996     # x 1
+        ref2:
+                voltage: 24.2
+                max_thrust: 29.7249 # N
+                polynominal4: -0.77797570    # x 10^4
+                polynominal3: 5.89913953    # x 10^3
+                polynominal2: -16.04748464    # x 10^2
+                polynominal1: 29.11084638     # x 10
+                polynominal0: 55.97079449     # x 1
+        ref3:
+                voltage: 23.2
+                max_thrust: 28.1109 # N
+                polynominal4: -1.25801783    # x 10^4
+                polynominal3: 8.63387963   # x 10^3
+                polynominal2: -20.94267963    # x 10^2
+                polynominal1: 32.31864308     # x 10
+                polynominal0: 56.17640633     # x 1
+        ref4:
+                voltage: 22.2
+                max_thrust: 26.1185 # N
+                polynominal4: -1.11334594    # x 10^4
+                polynominal3: 7.92919410   # x 10^3
+                polynominal2: -20.13466285    # x 10^2
+                polynominal1: 33.21529286     # x 10
+                polynominal0: 55.97027204     # x 1
+        ref5:
+                voltage: 21.2
+                max_thrust: 25.0065 # N
+                polynominal4: -2.22895013    # x 10^4
+                polynominal3: 13.53532533    # x 10^3
+                polynominal2: -29.00083702     # x 10^2
+                polynominal1: 38.13641967     # x 10
+                polynominal0: 56.22257781     # x 1

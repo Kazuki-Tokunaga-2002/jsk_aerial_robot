@@ -107,6 +107,13 @@
           <mesh filename="package://delta/urdf/mesh/module_20260809/thrust${self}.${module_visual_mesh_ext}" />
         </geometry>
       </visual>
+      <xacro:if value="${module_use_rotor_collision}">
+        <collision>
+          <geometry>
+            <cylinder radius="0.1905" length="0.01"/>
+          </geometry>
+        </collision>
+      </xacro:if>
     </link>
     <xacro:damping_factor link="thrust${self}" />
     <joint name="rotor${self}" type="continuous">

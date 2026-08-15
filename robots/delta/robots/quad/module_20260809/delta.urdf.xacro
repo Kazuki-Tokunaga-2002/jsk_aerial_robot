@@ -7,8 +7,10 @@
 
   <xacro:arg name="module_visual_mesh_ext" default="dae" />
   <xacro:arg name="module_use_link_collision" default="true" />
+  <xacro:arg name="module_use_rotor_collision" default="false" />
   <xacro:property name="module_visual_mesh_ext" value="$(arg module_visual_mesh_ext)" />
   <xacro:property name="module_use_link_collision" value="$(arg module_use_link_collision)" />
+  <xacro:property name="module_use_rotor_collision" value="$(arg module_use_rotor_collision)" />
   <xacro:property name="leg_length" value="0.207" />
   <xacro:property name="leg_radius" value="0.010" />
   <!-- wide foot contact for stable Gazebo landing -->
