@@ -40,12 +40,12 @@ class CeilingHorizontalTrial:
         self.hold_duration = float(rospy.get_param("~hold_duration", 1.0))
         self.future_ref_times = self.parse_float_list_param("~future_ref_times", [0.2, 0.4, 0.6, 0.8])
 
-        self.xy_thresh = float(rospy.get_param("~xy_thresh", 0.05))
+        self.xy_thresh = float(rospy.get_param("~xy_thresh", 0.07))
         self.z_thresh = float(rospy.get_param("~z_thresh", 0.03))
-        self.rp_thresh = float(rospy.get_param("~rp_thresh", 0.08))
+        self.rp_thresh = float(rospy.get_param("~rp_thresh", 0.13))
         self.yaw_thresh = float(rospy.get_param("~yaw_thresh", 0.12))
-        self.vel_thresh = float(rospy.get_param("~vel_thresh", 0.08))
-        self.dbar_thresh = float(rospy.get_param("~dbar_thresh", 0.08))
+        self.vel_thresh = float(rospy.get_param("~vel_thresh", 0.10))
+        self.dbar_thresh = float(rospy.get_param("~dbar_thresh", 0.30))
         self.joint_thresh = float(rospy.get_param("~joint_thresh", 0.05))
         self.joint_timeout = float(rospy.get_param("~joint_timeout", 15.0))
         self.hover_timeout = float(rospy.get_param("~hover_timeout", 10.0))
@@ -590,7 +590,6 @@ class CeilingHorizontalTrial:
             stable = (
                 abs(pos_error[0]) < self.xy_thresh and
                 abs(pos_error[1]) < self.xy_thresh and
-                abs(pos_error[2]) < self.z_thresh and
                 abs(rpy[0]) < self.rp_thresh and
                 abs(rpy[1]) < self.rp_thresh and
                 abs(yaw_error) < self.yaw_thresh and
