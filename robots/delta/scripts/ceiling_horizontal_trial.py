@@ -26,7 +26,7 @@ class CeilingHorizontalTrial:
         self.dbar_ref = float(rospy.get_param("~dbar_ref", rospy.get_param("~dbar", 1.5)))
         self.vref = float(rospy.get_param("~vref", 0.2))
         self.q123 = self.parse_vector_param("~q123", [1.4, 1.4, 1.4], 3)
-        self.yaw_ref_param = rospy.get_param("~yaw_ref", None)
+        self.yaw_ref_param = rospy.get_param("~yaw_ref", 0.0)
 
         self.ceiling_height = float(rospy.get_param("~ceiling_height", 2.73))
         self.rotor_radius = float(rospy.get_param("~rotor_radius", 0.1905))
