@@ -33,6 +33,7 @@ class CeilingHorizontalTrial:
         self.travel_distance = float(rospy.get_param("~travel_distance", 1.0))
         self.approach_vmax = float(rospy.get_param("~approach_vmax", 0.03))
         self.approach_min_duration = float(rospy.get_param("~approach_min_duration", 3.0))
+        self.yaw_align_rate = float(rospy.get_param("~yaw_align_rate", 0.03))
         self.nav_rate = float(rospy.get_param("~nav_rate", 50.0))
         self.settle_duration = float(rospy.get_param("~settle_duration", 1.0))
         self.settle_timeout = float(rospy.get_param("~settle_timeout", 30.0))
@@ -65,6 +66,8 @@ class CeilingHorizontalTrial:
             raise ValueError("~rotor_radius must be positive")
         if self.approach_vmax <= 0.0:
             raise ValueError("~approach_vmax must be positive")
+        if self.yaw_align_rate <= 0.0:
+            raise ValueError("~yaw_align_rate must be positive")
         if self.nav_rate <= 0.0:
             raise ValueError("~nav_rate must be positive")
 
@@ -128,6 +131,10 @@ class CeilingHorizontalTrial:
     @staticmethod
     def shortest_angle_error(target, current):
         return math.atan2(math.sin(target - current), math.cos(target - current))
+
+    @staticmethod
+    def normalize_angle(angle):
+        return math.atan2(math.sin(angle), math.cos(angle))
 
     @staticmethod
     def is_current_yaw_param(value):
@@ -242,14 +249,17 @@ class CeilingHorizontalTrial:
                 "yaw": float(yaw),
             }
 
-    def set_reference_segment(self, start_time, start_pos, goal_pos, duration, yaw):
+    def set_reference_segment(self, start_time, start_pos, goal_pos, duration, start_yaw, goal_yaw=None):
+        if goal_yaw is None:
+            goal_yaw = start_yaw
         with self.reference_lock:
             self.reference_segment = {
                 "start_time": start_time,
                 "start_pos": np.array(start_pos, dtype=float),
                 "goal_pos": np.array(goal_pos, dtype=float),
                 "duration": float(duration),
-                "yaw": float(yaw),
+                "start_yaw": float(start_yaw),
+                "goal_yaw": float(goal_yaw),
             }
 
     def set_static_reference_segment(self, pos, yaw):
@@ -269,7 +279,8 @@ class CeilingHorizontalTrial:
                     "start_pos": np.array(segment["start_pos"], dtype=float),
                     "goal_pos": np.array(segment["goal_pos"], dtype=float),
                     "duration": segment["duration"],
-                    "yaw": segment["yaw"],
+                    "start_yaw": segment["start_yaw"],
+                    "goal_yaw": segment["goal_yaw"],
                 }
 
         if segment is None:
@@ -278,11 +289,13 @@ class CeilingHorizontalTrial:
         elapsed = (rospy.Time.now() - segment["start_time"]).to_sec() + offset
         s, _ds_dt = self.minimum_jerk(elapsed, segment["duration"])
         pos = segment["start_pos"] + (segment["goal_pos"] - segment["start_pos"]) * s
+        yaw_delta = self.shortest_angle_error(segment["goal_yaw"], segment["start_yaw"])
+        yaw = self.normalize_angle(segment["start_yaw"] + yaw_delta * s)
         return {
             "x": float(pos[0]),
             "y": float(pos[1]),
             "z": float(pos[2]),
-            "yaw": segment["yaw"],
+            "yaw": yaw,
         }
 
     def publish_reference_timer(self, _event):
@@ -395,7 +408,7 @@ class CeilingHorizontalTrial:
         rotor1_z = pos[2] + offset_world[2]
         return (self.ceiling_height - rotor1_z) / self.rotor_radius
 
-    def publish_nav(self, pos, vel, yaw_ref):
+    def publish_nav(self, pos, vel, yaw_ref, yaw_rate=0.0):
         msg = FlightNav()
         msg.header.stamp = rospy.Time.now()
         msg.control_frame = FlightNav.WORLD_FRAME
@@ -410,7 +423,7 @@ class CeilingHorizontalTrial:
         msg.target_vel_y = float(vel[1])
         msg.target_vel_z = float(vel[2])
         msg.target_yaw = float(yaw_ref)
-        msg.target_omega_z = 0.0
+        msg.target_omega_z = float(yaw_rate)
         self.nav_pub.publish(msg)
         self.set_reference_pose(pos[0], pos[1], pos[2], yaw_ref)
         self.publish_reference()
@@ -475,6 +488,80 @@ class CeilingHorizontalTrial:
 
         self.publish_nav(goal_pos, np.zeros(3), yaw_ref)
         self.set_static_reference_segment(goal_pos, yaw_ref)
+
+    def execute_yaw_align(self, target_pos, start_yaw, goal_yaw):
+        self.publish_phase("yaw_align")
+        start_time = rospy.Time.now()
+        rate = rospy.Rate(self.nav_rate)
+        target_pos = np.array(target_pos, dtype=float)
+        yaw_delta = self.shortest_angle_error(goal_yaw, start_yaw)
+        duration = 1.875 * abs(yaw_delta) / self.yaw_align_rate
+        rospy.loginfo("[ceiling_trial] yaw align delta=%.3f rad, duration=%.3f sec",
+                      yaw_delta, duration)
+        self.set_reference_segment(start_time, target_pos, target_pos,
+                                   duration, start_yaw, goal_yaw)
+
+        while not rospy.is_shutdown():
+            elapsed = (rospy.Time.now() - start_time).to_sec()
+            s, ds_dt = self.minimum_jerk(elapsed, duration)
+            yaw = self.normalize_angle(start_yaw + yaw_delta * s)
+            yaw_rate = yaw_delta * ds_dt
+            self.publish_nav(target_pos, np.zeros(3), yaw, yaw_rate)
+            if elapsed >= duration:
+                break
+            rate.sleep()
+
+        self.publish_nav(target_pos, np.zeros(3), goal_yaw)
+        self.set_static_reference_segment(target_pos, goal_yaw)
+
+    def wait_until_yaw_stable(self, target_pos, yaw_ref):
+        self.publish_phase("yaw_settle")
+        rate = rospy.Rate(self.nav_rate)
+        settle_start = rospy.Time.now()
+        stable_start = None
+        target_pos = np.array(target_pos, dtype=float)
+        self.set_static_reference_segment(target_pos, yaw_ref)
+
+        while not rospy.is_shutdown():
+            if (rospy.Time.now() - settle_start).to_sec() > self.settle_timeout:
+                raise RuntimeError("yaw settle timeout")
+
+            self.publish_nav(target_pos, np.zeros(3), yaw_ref)
+            data = self.get_position_rpy_vel()
+            if data is None:
+                rate.sleep()
+                continue
+
+            pos, rpy, vel, _quat = data
+            pos_error = pos - target_pos
+            yaw_error = self.shortest_angle_error(yaw_ref, rpy[2])
+            stable = (
+                abs(pos_error[0]) < self.xy_thresh and
+                abs(pos_error[1]) < self.xy_thresh and
+                abs(pos_error[2]) < self.z_thresh and
+                abs(rpy[0]) < self.rp_thresh and
+                abs(rpy[1]) < self.rp_thresh and
+                abs(yaw_error) < self.yaw_thresh and
+                np.linalg.norm(vel) < self.vel_thresh
+            )
+
+            rospy.loginfo_throttle(
+                1.0,
+                "yaw settle err xyz=[%.3f %.3f %.3f], rp=[%.3f %.3f], yaw=%.3f",
+                pos_error[0], pos_error[1], pos_error[2], rpy[0], rpy[1], yaw_error)
+
+            now = rospy.Time.now()
+            if stable:
+                if stable_start is None:
+                    stable_start = now
+                if (now - stable_start).to_sec() >= self.settle_duration:
+                    rospy.loginfo("[ceiling_trial] yaw stable for %.2f sec", self.settle_duration)
+                    return
+            else:
+                stable_start = None
+            rate.sleep()
+
+        raise RuntimeError("shutdown while waiting for yaw stable state")
 
     def wait_until_stable(self, target_pos, yaw_ref, rotor1_offset_cog):
         self.publish_phase("settle")
@@ -549,11 +636,27 @@ class CeilingHorizontalTrial:
         x_ref = initial_pos[0]
         y_ref = initial_pos[1]
         yaw_ref = initial_rpy[2] if self.is_current_yaw_param(self.yaw_ref_param) else float(self.yaw_ref_param)
+        yaw_ref = self.normalize_angle(yaw_ref)
 
         rospy.loginfo("[ceiling_trial] start xy=(%.3f, %.3f), yaw_ref=%.3f", x_ref, y_ref, yaw_ref)
 
         self.set_q123_and_wait()
         rotor1_offset_cog = self.lookup_rotor1_offset_from_cog()
+
+        data = self.get_position_rpy_vel()
+        if data is None:
+            raise RuntimeError("missing odom before yaw align")
+        yaw_align_pos, yaw_align_rpy, _vel, _quat = data
+        self.execute_yaw_align(yaw_align_pos, yaw_align_rpy[2], yaw_ref)
+        self.wait_until_yaw_stable(yaw_align_pos, yaw_ref)
+
+        data = self.get_position_rpy_vel()
+        if data is None:
+            raise RuntimeError("missing odom after yaw align")
+        aligned_pos, _aligned_rpy, _vel, _quat = data
+        x_ref = aligned_pos[0]
+        y_ref = aligned_pos[1]
+
         z_ref = self.compute_z_ref(rotor1_offset_cog, yaw_ref)
         target_pos = np.array([x_ref, y_ref, z_ref])
 
