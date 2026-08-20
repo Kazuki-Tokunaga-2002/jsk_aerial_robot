@@ -21,7 +21,7 @@ controller:
   xy:
     p_gain: 5.0
     i_gain: 1.0
-    d_gain: 2.0
+    d_gain: 2.5
     limit_sum: 4.0
     limit_p: 12.0
     limit_i: 12.0
@@ -42,25 +42,25 @@ controller:
     start_rp_integration_height: 0.01
 
   roll:
-    p_gain: 20.0
-    i_gain: 1.0
-    d_gain: 5.0
+    p_gain: 17.0
+    i_gain: 0.5
+    d_gain: 9.0
     limit_sum: 50.0
     limit_p: 50.0
     limit_i: 50.0
     limit_d: 50.0
 
   pitch:
-    p_gain: 20.0
-    i_gain: 1.0
-    d_gain: 5.0
+    p_gain: 18.0
+    i_gain: 0.5
+    d_gain: 7.0
     limit_sum: 50.0
     limit_p: 50.0
     limit_i: 50.0
     limit_d: 50.0
 
   yaw:
-    p_gain: 4.0
+    p_gain: 5.0
     i_gain: 2.0
     d_gain: 2.0
     limit_err_p: 2.0

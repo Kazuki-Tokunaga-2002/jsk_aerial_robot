@@ -23,7 +23,7 @@ servo_controller:
 
   gimbals:
     no_real_state: false # true if there is no servo state from real machine
-    angle_sgn: 1
+    angle_sgn: -1
     angle_scale: 0.00153473016
     zero_point_offset: 2047
 
