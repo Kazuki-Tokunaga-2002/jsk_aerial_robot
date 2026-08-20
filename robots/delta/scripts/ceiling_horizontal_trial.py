@@ -8,7 +8,7 @@ import threading
 import numpy as np
 import rospy
 import tf2_ros
-from aerial_robot_msgs.msg import FlightNav
+from aerial_robot_msgs.msg import FlightNav, PoseControlPid
 from geometry_msgs.msg import PoseStamped, TransformStamped
 from nav_msgs.msg import Odometry
 from sensor_msgs.msg import JointState
@@ -84,6 +84,8 @@ class CeilingHorizontalTrial:
                                          String, queue_size=1, latch=True)
         self.condition_pub = rospy.Publisher(self.robot_ns + "/ceiling_horizontal_trial/condition",
                                              String, queue_size=1, latch=True)
+        self.error_pub = rospy.Publisher(self.robot_ns + "/ceiling_horizontal_trial/error_xyzrpy",
+                                         PoseControlPid, queue_size=1)
 
         self.odom_sub = rospy.Subscriber(self.robot_ns + "/uav/cog/odom", Odometry, self.odom_callback, queue_size=1)
         self.flight_state_sub = rospy.Subscriber(self.robot_ns + "/flight_state", UInt8,
@@ -413,6 +415,43 @@ class CeilingHorizontalTrial:
         self.set_reference_pose(pos[0], pos[1], pos[2], yaw_ref)
         self.publish_reference()
 
+    def publish_error_xyzrpy(self, target_pos, target_vel, yaw_ref):
+        data = self.get_position_rpy_vel()
+        if data is None:
+            return
+
+        pos, rpy, vel, _quat = data
+        target_pos = np.array(target_pos, dtype=float)
+        target_vel = np.array(target_vel, dtype=float)
+
+        msg = PoseControlPid()
+        msg.header.stamp = rospy.Time.now()
+        msg.header.frame_id = self.world_frame
+
+        msg.x.target_p = float(target_pos[0])
+        msg.x.err_p = float(target_pos[0] - pos[0])
+        msg.x.target_d = float(target_vel[0])
+        msg.x.err_d = float(target_vel[0] - vel[0])
+
+        msg.y.target_p = float(target_pos[1])
+        msg.y.err_p = float(target_pos[1] - pos[1])
+        msg.y.target_d = float(target_vel[1])
+        msg.y.err_d = float(target_vel[1] - vel[1])
+
+        msg.z.target_p = float(target_pos[2])
+        msg.z.err_p = float(target_pos[2] - pos[2])
+        msg.z.target_d = float(target_vel[2])
+        msg.z.err_d = float(target_vel[2] - vel[2])
+
+        msg.roll.target_p = 0.0
+        msg.roll.err_p = float(0.0 - rpy[0])
+        msg.pitch.target_p = 0.0
+        msg.pitch.err_p = float(0.0 - rpy[1])
+        msg.yaw.target_p = float(yaw_ref)
+        msg.yaw.err_p = float(self.shortest_angle_error(yaw_ref, rpy[2]))
+
+        self.error_pub.publish(msg)
+
     def execute_minimum_jerk(self, start_pos, goal_pos, duration, yaw_ref, phase):
         self.publish_phase(phase)
         start_time = rospy.Time.now()
@@ -428,6 +467,8 @@ class CeilingHorizontalTrial:
             pos = start_pos + delta * s
             vel = delta * ds_dt
             self.publish_nav(pos, vel, yaw_ref)
+            if phase == "horizontal_x":
+                self.publish_error_xyzrpy(pos, vel, yaw_ref)
             if elapsed >= duration:
                 break
             rate.sleep()
