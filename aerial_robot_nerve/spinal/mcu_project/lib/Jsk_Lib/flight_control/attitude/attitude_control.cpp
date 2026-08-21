@@ -553,7 +553,7 @@ void AttitudeController::fourAxisCommandCallback( const spinal::FourAxisCommand 
       ceiling_thrust_scale_[i] = scale;
 
       // base thrust is about the z control
-      base_thrust_term_[i] = cmd_msg.base_thrust[i] * ceiling_thrust_scale_[i];
+      base_thrust_term_[i] = cmd_msg.base_thrust[i];
 
       // reconstruct the pi term for yaw (temporary measure for pwm saturation avoidance)
       if(max_yaw_term_index != -1)
@@ -1143,6 +1143,8 @@ void AttitudeController::pwmConversion()
               break;
             }
 
+          // Apply ceiling-effect compensation to the final thrust command.
+          target_thrust_[i] *= ceiling_thrust_scale_[rotor_coef_ * i];
           target_pwm_[i] = convert(target_thrust_[i]);
 
           /* constraint */
