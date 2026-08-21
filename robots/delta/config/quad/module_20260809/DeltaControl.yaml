@@ -4,7 +4,7 @@ controller:
   control_verbose: false
   hovering_approximate: false
   aerial_mode_add_joint_torque_constraint: false # joint torque constraints
-  use_fc_for_att_control: false # attitude feedback by Spinal
+  use_fc_for_att_control: true # attitude feedback by Spinal
   linear_mode: false # nonlinear NLOpt/SLSQP wrench allocation
   nlopt_phi_limit: 1.0471975512 # gimbal angle bound [rad] (pi/3)
   nlopt_lambda_weight: 1.0 # thrust effort cost
@@ -30,7 +30,7 @@ controller:
   z:
     p_gain: 5.0
     i_gain: 1.5
-    d_gain: 2.5
+    d_gain: 3.0
     limit_err_p: 1.0
     limit_sum: 25.0 # N for clamping thrust force
     limit_p: 25.0
@@ -42,18 +42,18 @@ controller:
     start_rp_integration_height: 0.01
 
   roll:
-    p_gain: 17.0
+    p_gain: 9.0
     i_gain: 0.5
-    d_gain: 9.0
+    d_gain: 3.0
     limit_sum: 50.0
     limit_p: 50.0
     limit_i: 50.0
     limit_d: 50.0
 
   pitch:
-    p_gain: 18.0
+    p_gain: 8.0
     i_gain: 0.5
-    d_gain: 7.0
+    d_gain: 2.5
     limit_sum: 50.0
     limit_p: 50.0
     limit_i: 50.0
@@ -62,7 +62,7 @@ controller:
   yaw:
     p_gain: 5.0
     i_gain: 2.0
-    d_gain: 2.0
+    d_gain: 1.0
     limit_err_p: 2.0
     limit_sum: 20.0
     limit_p: 3.0
