@@ -58,34 +58,6 @@
       <axis xyz="0 0 1"/>
     </joint>
 
-    <link name="link${self}_leg2">
-      <inertial>
-        <mass value="${leg_mass}"/>
-        <inertia
-            ixx="${(leg_radius * leg_radius / 4.0 + leg_length * leg_length / 12.0) * leg_mass}" ixy="0.0" ixz="0.0"
-            iyy="${(leg_radius * leg_radius / 4.0 + leg_length * leg_length / 12.0) * leg_mass}" iyz="0.0"
-            izz="${(leg_radius * leg_radius / 2.0) * leg_mass}"/>
-      </inertial>
-      <collision>
-        <geometry>
-          <cylinder radius="${leg_radius}" length="${leg_length}"/>
-        </geometry>
-      </collision>
-      <!-- wide foot contact for stable Gazebo landing -->
-      <collision>
-        <origin rpy="0 0 0" xyz="0 0 ${-leg_length/2.0 + foot_pad_thickness/2.0}"/>
-        <geometry>
-          <cylinder radius="${foot_pad_radius}" length="${foot_pad_thickness}"/>
-        </geometry>
-      </collision>
-    </link>
-    <joint name="link${self}_leg2_joint" type="fixed">
-      <parent link="link${self}"/>
-      <child link="link${self}_leg2"/>
-      <origin rpy="0 0 0" xyz="0.0364 0 ${-0.012-leg_length/2.0}"/>
-      <axis xyz="0 0 1"/>
-    </joint>
-
     <!-- gimbal -->
     <link name="gimbal_link${self}">
       <inertial>
